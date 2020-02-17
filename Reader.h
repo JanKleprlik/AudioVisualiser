@@ -5,10 +5,15 @@
 class Reader
 {
 public:
+	Reader() {}
 private:
-	void read_metadata();
+	//void read_metadata();  //Wont need
 
-	std::ifstream input;
+	//std::ifstream input;		//Wont need
 	const int bufferSize = 16384;
+	
+	
+	sf::SoundBuffer soundBuffer_;
+	
 };
 
