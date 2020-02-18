@@ -2,12 +2,20 @@
 //
 #include <SFML/Graphics.hpp>
 #include <iostream>
-/*/
+#include "Reader.h"
+
+using namespace std;
+
+/**/
 int main()
 {
-    std::cout << "Hello World!\n";
+	ifstream input("Ressources/Crazy.bin");
+	Reader reader(input);
+	reader.validate_metadata();
+
 }
-*/
+/**/
+/*/
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
@@ -58,3 +66,4 @@ int main()
 
 	return 0;
 }
+/**/
