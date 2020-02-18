@@ -169,9 +169,11 @@
   <ItemGroup>
     <ClCompile Include="AudioVizualizer.cpp" />
     <ClCompile Include="Reader.cpp" />
+    <ClCompile Include="SongDatabase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Reader.h" />
+    <ClInclude Include="SongDatabase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -9,16 +9,15 @@ typedef std::valarray<std::complex<double>> ComplexArray;
 class Reader
 {
 public:
-
-	bool validate_metadata();
-	Reader(std::ifstream& input): _input(input) {}
-	void fft(ComplexArray data);
+	Reader() {}
 private:
+	//void read_metadata();  //Wont need
 
-
-	void get_buffer();
-	std::ifstream& _input;
+	//std::ifstream input;		//Wont need
 	const int bufferSize = 16384;
-
+	
+	
+	sf::SoundBuffer soundBuffer_;
+	
 };
 
