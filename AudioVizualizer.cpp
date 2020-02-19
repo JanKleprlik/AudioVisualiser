@@ -2,16 +2,35 @@
 //
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "Reader.h"
+#include "SoundProcessor.h"
 
 using namespace std;
+using namespace sf;
 
 /**/
 int main()
 {
-	ifstream input("Ressources/Crazy.bin");
-	Reader reader(input);
-	reader.validate_metadata();
+	RenderWindow vizualization_window(VideoMode(800, 800, 16), "Feel The Beat");
+
+	const string song = "chameleon.wav";
+
+	SoundProcessor spr(song);
+	spr.Initialize();
+
+	Event event;
+	while (vizualization_window.isOpen()) {
+		while (vizualization_window.pollEvent(event)) {
+			if (event.type == sf::Event::Closed) {
+				vizualization_window.close();
+			}
+		}
+		spr.update();
+		vizualization_window.clear();
+		spr.draw(vizualization_window);
+		vizualization_window.display();
+
+		
+	}
 
 }
 /**/

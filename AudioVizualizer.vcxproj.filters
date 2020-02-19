@@ -18,18 +18,18 @@
     <ClCompile Include="AudioVizualizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Reader.cpp">
+    <ClCompile Include="SongDatabase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SongDatabase.cpp">
+    <ClCompile Include="SoundProcessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Reader.h">
+    <ClInclude Include="SongDatabase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SongDatabase.h">
+    <ClInclude Include="SoundProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -168,12 +168,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AudioVizualizer.cpp" />
-    <ClCompile Include="Reader.cpp" />
     <ClCompile Include="SongDatabase.cpp" />
+    <ClCompile Include="SoundProcessor.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Reader.h" />
     <ClInclude Include="SongDatabase.h" />
+    <ClInclude Include="SoundProcessor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
