@@ -10,13 +10,16 @@
 class SoundProcessor
 {
 public:
-	SoundProcessor( std::string const& name): songName(name) {}
-	void Initialize();
+	//Constructor
+	//name - name of the song you want to play
+	SoundProcessor( std::string const& name): songName(name), sampleCount(0), sampleRate(0) {}
+	void initialize();
 	void draw(sf::RenderWindow& window);
 	void update();
 private:
 	//drawables
 	sf::VertexArray VA1;
+	sf::VertexArray VA2;
 
 
 	//functions
@@ -24,6 +27,8 @@ private:
 	void generate_hamming_window();
 	void set_samples_hamming();
 	void set_samples();
+	void set_samples_hamming_trimmed();
+	void set_samples_trimmed();
 
 
 	//FFT information
@@ -39,7 +44,7 @@ private:
 	sf::Sound song;
 	int sampleRate;
 	int sampleCount;
-	const int bufferSize = 16384;//  implicit value is not needed //wont play songs that have less thatn 16384 samples
+	const int bufferSize = 16384;//  implicit value is not needed //wont play songs that have less than 16384 samples
 
 	//Helper constants
 	const std::string songPath = "Ressources/";
