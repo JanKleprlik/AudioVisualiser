@@ -30,7 +30,7 @@ void SoundProcessor::Initialize() {
 	samples.resize(bufferSize);
 
 	//do this somere else, to all chosen vizualization effects
-	VA1.resize(900);
+	VA1.resize(bufferSize);
 	VA1.setPrimitiveType(LineStrip);
 
 	song.play();
@@ -53,11 +53,11 @@ void SoundProcessor::set_samples_hamming() {
 void SoundProcessor::set_samples() {
 	int offset = song.getPlayingOffset().asSeconds() * sampleRate;
 	//auto* buffer = soundBuffer.getSamples();
-	for (int i = 0; i < 900; i++) {
+	for (int i = 0; i < bufferSize; i++) {
 		samples[i] = complex<double>(soundBuffer.getSamples()[i + offset]);
 		//(float)bufferSize * 900
 		//delete this later - only testing purposes
-		VA1[i] = Vertex(Vector2f(0, 250) + Vector2f(i , samples[i].real() * 0.005), Color::Color(255, 0, 0));
+		VA1[i] = Vertex(Vector2f(0, 250) + Vector2f(i / (float)bufferSize * 900, samples[i].real() * 0.005), Color::Color(255, 0, 0));
 	}
 }
 
