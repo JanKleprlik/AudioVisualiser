@@ -1,5 +1,6 @@
 #include "Vizualizer.h"
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 using namespace sf;
@@ -75,31 +76,20 @@ void Menu::draw(RenderWindow& window)
 	text.setCharacterSize(24);
 	text.setFillColor(Color::Black);
 	//"song names"
-	draw_small_table(130.f, 200.f, window);
+	draw_song_table(130.f, 200.f, window);
 
 	//"mode names"
-	draw_small_table(130.f + table_move.x, 200.f, window);
+	draw_mode_table(130.f + table_move.x, 200.f, window);
 
-	/*
-	//TODO: dodìlat modes - zatím jsou zkopírovaný z SONGS
-	//MODES
-	for (int i = 0; i < 6; i++)
-	{
-		text.setString(database.get_song_at(i + song_page * 6));
-		text.setPosition(156.f, 210.f + i * 70);
-		small_circ_left.setPosition(130.f, 200.f + i * 70);
-		small_circ_right.setPosition(390.f, 200.f + i * 70);
-		small_rect.setPosition(157.f, 200.f + i * 70);
+	//song picker
 
-		window.draw(small_circ_right);
-		window.draw(small_circ_left);
-		window.draw(small_rect);
-		window.draw(text);
-	}
-	*/
+	TriangleFan triangle
+
+	
+	//VIZUALIZE
 	
 }
-void Menu::draw_small_table(float x, float y, RenderWindow& window)
+void Menu::draw_song_table(float x, float y, RenderWindow& window)
 {
 	for (int i = 0; i < 6; i++)
 	{
@@ -116,12 +106,37 @@ void Menu::draw_small_table(float x, float y, RenderWindow& window)
 	}
 }
 
+void Menu::draw_mode_table(float x, float y, sf::RenderWindow& window)
+{
+	for (int i = 0; i < 6; i++)
+	{
+		text.setString(modes[i]);
+		text.setPosition(x + 26, y + 10 + i * 70);
+		small_circ_left.setPosition(x, y + i * 70);
+		small_circ_right.setPosition(x + 260, y + i * 70);
+		small_rect.setPosition(x + 27, y + i * 70);
+
+		window.draw(small_circ_right);
+		window.draw(small_circ_left);
+		window.draw(small_rect);
+		window.draw(text);
+	}
+}
+
 
 
 Menu::Menu()
 {
-	//adding default songs to the database
-	#pragma region default songs
+
+	#pragma region loading song names
+
+	ifstream sr("Resources/Songs/song_database.txt");
+	string song_name;
+	while(getline(sr,song_name))
+	{
+		database.add_song(song_name);
+	}
+	/*
 	database.add_song("animals.wav");
 	database.add_song("ass.wav");
 	database.add_song("canary.wav");
@@ -134,8 +149,20 @@ Menu::Menu()
 	database.add_song("ppl.wav");
 	database.add_song("sifflet.wav");
 	database.add_song("sintra.wav");
+	*/
 	#pragma endregion
 
+	//loading modes
+	#pragma region loading modes
+	modes.push_back("Amplitude");
+	modes.push_back("Radio");
+	modes.push_back("Map");
+	modes.push_back("Stripes");
+	modes.push_back("Chaos");
+	modes.push_back("Space");
+	#pragma endregion 
+
+	
 	//initializing helper variables
 	if (!sansation.loadFromFile("Resources/Fonts/sansation.ttf"))
 	{

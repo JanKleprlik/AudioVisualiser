@@ -14,11 +14,13 @@ private:
 
 	
 	SongDatabase database;
+	std::vector<std::string> modes;
 	int song_page = 0;
 
 	// Helper funcitons
-	void draw_small_table(float x, float y, sf::RenderWindow& window);
-	
+	void draw_song_table(float x, float y, sf::RenderWindow& window);
+	void draw_mode_table(float x, float y, sf::RenderWindow& window);
+
 	// Helper variables & constants
 	const sf::Color grey = sf::Color(146, 146, 146);
 	const sf::Color light_grey = sf::Color(209, 209, 209);
@@ -47,6 +49,7 @@ public:
 private:
 	sf::RenderWindow window;
 	std::string active_song;
+	std::string active_mode; //perhaps int
 	Menu menu;
 	bool is_menu_active = true;
 
