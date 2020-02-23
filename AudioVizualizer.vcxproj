@@ -175,7 +175,6 @@
     <ClCompile Include="Vizualizer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Buttons.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="SongDatabase.h" />
     <ClInclude Include="SoundProcessor.h" />

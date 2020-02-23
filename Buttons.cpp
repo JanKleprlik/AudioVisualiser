@@ -1,4 +1,6 @@
-#include "Buttons.h"
+#include "Menu.h"
+#include <iostream>
+
 #pragma region Abstract button
 /*
  * Returns true if mouse is on the button. False otherwise.
@@ -10,6 +12,7 @@ bool AbstractButton::is_focused(sf::Vector2i vector)
 }
 void AbstractButton::set_font(sf::Font& font)
 {
+	
 	text.setFont(font);
 }
 std::string AbstractButton::get_text()
@@ -194,4 +197,48 @@ void TextButton::draw(float x, float y, sf::RenderWindow& window)
 	//drawing button
 	draw(window);
 }
+#pragma endregion 
+
+#pragma region Play Button
+void PlayButton::activate(Menu& menu)
+{
+	menu.active = false;
+}
+
+#pragma endregion 
+
+#pragma region Increment Button
+void IncrementButton::activate(Menu& menu)
+{
+	menu.change_page(inc);
+}
+
+#pragma endregion 
+
+#pragma region Mode Button
+void ModeButton::activate(Menu& menu)
+{
+	menu.set_mode(text.getString());
+}
+
+#pragma endregion
+
+#pragma region Song Button
+void SongButton::activate(Menu& menu)
+{
+	menu.set_song(text.getString());
+}
+
+#pragma endregion 
+
+#pragma region AddSong Button
+void AddSongButton::activate(Menu& menu)
+{
+	std::string song_name;
+
+	std::cin >> song_name;
+	
+	menu.add_song(song_name);
+}
+
 #pragma endregion 

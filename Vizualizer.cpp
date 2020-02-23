@@ -11,7 +11,7 @@ using namespace sf;
 void Vizualizer::run()
 {
 	Event event;
-	Clock clock;
+	const Clock clock;
 	Time time;
 	int i = 0;
 	while(window.isOpen())

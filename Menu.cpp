@@ -164,10 +164,10 @@ Menu::Menu()
 	#pragma region loading song names
 
 	ifstream sr("Resources/Songs/song_database.txt");
-	string song_name;
-	while (getline(sr, song_name))
+	string song_name_str;
+	while (getline(sr, song_name_str))
 	{
-		database.add_song(song_name);
+		database.add_song(song_name_str);
 	}
 	#pragma endregion
 
@@ -180,8 +180,8 @@ Menu::Menu()
 
 	#pragma region SONGS COLLUMN
 	{
-		float x = 285.f;
-		float y = 130.f;
+		constexpr float x = 285.f;
+		constexpr float y = 130.f;
 		RoundButton songs_header(310.f, 100.f);
 		songs_header.set_button_color(grey);
 		songs_header.set_font(font);
@@ -207,8 +207,8 @@ Menu::Menu()
 	#pragma region MODES COLLUMN
 	{
 		//MODES COLLUMN
-		float x = 739.f;
-		float y = 130.f;
+		constexpr float x = 739.f;
+		constexpr float y = 130.f;
 		RoundButton modes_header(310.f, 100.f);
 		modes_header.set_button_color(grey);
 		modes_header.set_font(font);
@@ -233,10 +233,10 @@ Menu::Menu()
 
 	#pragma region CONTROLS
 	{
-		float x = 165.f;
-		float y = 655.f;
+		constexpr float x = 165.f;
+		constexpr float y = 655.f;
 
-		int size = 60;
+		constexpr int size = 60;
 
 		TriangleButton previous(size);
 		previous.set_button_color(grey);
@@ -278,9 +278,4 @@ Menu::Menu()
 	triangle.setFillColor(grey);
 	plus.setFillColor(grey);
 	plus_cover.setFillColor(Color::Black);
-}
-
-void Menu::start_playing()
-{
-	active = false;
 }
