@@ -7,9 +7,26 @@ void SongDatabase::add_song(const std::string& name)
 {
 	if (file_existence(name))
 	{
+		std::ofstream ofs;
+		ofs.open(path + "song_database.txt", std::ios_base::app);
+		ofs << name << std::endl;
+		ofs.close();
+		database.push_back(name);
+
+	}
+}
+/*
+ * Loads songs form 'song_database.txt' if the song exists
+ */
+void SongDatabase::load_song(const std::string& name)
+{
+	if (file_existence(name))
+	{
 		database.push_back(name);
 	}
 }
+ 
+
 /*
  * Deletes song 'name' from the database.
  */
@@ -35,7 +52,7 @@ bool SongDatabase::file_existence(const std::string& name)
 
 std::string SongDatabase::get_song_at(int index)
 {
-	if (index > database.size())
+	if (index >= database.size())
 	{
 		return "";
 	}
@@ -44,4 +61,9 @@ std::string SongDatabase::get_song_at(int index)
 		return database[index];
 	}
 
+}
+
+int SongDatabase::get_size()
+{
+	return database.size();
 }

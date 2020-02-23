@@ -18,6 +18,8 @@ void Vizualizer::run()
 	{
 		while(window.pollEvent(event))
 		{
+
+			#pragma region Event handling
 			if (event.type == Event::Closed)
 			{
 				window.close();
@@ -33,16 +35,26 @@ void Vizualizer::run()
 						if (button->is_focused(mouse_vec))
 						{
 							cout << button->get_text() << endl;
-							//button->activate();
+							button->activate(menu);
 						}
 					}
+					for(auto&& button : menu.song_buttons)
+					{
+						if (button->is_focused(mouse_vec))
+						{
+							cout << button->get_text() << endl;
+							button->activate(menu);
+						}
+					}					
 					//cout << "Button Released At " << Mouse::getPosition(window).x << " : " << Mouse::getPosition(window).y << endl;
 				}
 			}
-			
+			#pragma endregion 
 		}
-		time = clock.getElapsedTime();
-		int fps = i / time.asSeconds();
+
+		
+		//time = clock.getElapsedTime();
+		//int fps = i / time.asSeconds();
 		//cout << fps << endl;
 		window.clear();
 		if (is_menu_active)
@@ -50,17 +62,25 @@ void Vizualizer::run()
 			//draw menu
 			menu.draw(window);
 			is_menu_active = menu.active;
+			if (!is_menu_active)
+			{
+				processor.initialize(menu.get_song());
+			}
 		}
 		else
 		{
-			cout << "IT WORKED??";
+			//cout << menu.active << " : " << menu.get_mode() << " : " << menu.get_song() << endl;
 			//draw vizualization
+			processor.update();
+			window.clear();
+			processor.draw(window);
+			
 		}
 
 
 
 		window.display();
-		i++;
+		//i++;
 	}
 }
 

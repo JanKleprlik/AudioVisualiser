@@ -5,7 +5,8 @@ using namespace sf;
 /*
 Initializes data needed for vizualizin given song
 */
-void SoundProcessor::initialize() {
+void SoundProcessor::initialize(const std::string song_name) {
+	songName = song_name;
 	//check for existence of a song
 	ifstream f(songPath + songName);
 	if (!f.good()) {
@@ -46,14 +47,6 @@ void SoundProcessor::generate_hamming_window() {
 	}
 }
 
-void SoundProcessor::set_samples_hamming() {
-	int offset = song.getPlayingOffset().asSeconds() * sampleRate;
-	for (int i = 0; i < bufferSize; i++) {
-		samples_hamming[i] = complex<double>(soundBuffer.getSamples()[i + offset] * window_hamming[i],0);
-		VA2[i] = Vertex(Vector2f(0, 250) + Vector2f(i / (float)bufferSize * 700, samples_hamming[i].real() * 0.005), Color::Color(255, 0, 0));
-	}
-}
-
 void SoundProcessor::set_samples() {
 	int offset = song.getPlayingOffset().asSeconds() * sampleRate;
 	for (int i = 0; i < bufferSize; i++) {
@@ -61,6 +54,13 @@ void SoundProcessor::set_samples() {
 		//  /(float)bufferSize * 900
 		//delete this later - only testing purposes
 		VA1[i] = Vertex(Vector2f(0, 550) + Vector2f(i / (float)bufferSize * 700, samples[i].real() * 0.005), Color::Color(57, 255, 20));
+	}
+}
+void SoundProcessor::set_samples_hamming() {
+	int offset = song.getPlayingOffset().asSeconds() * sampleRate;
+	for (int i = 0; i < bufferSize; i++) {
+		samples_hamming[i] = complex<double>(soundBuffer.getSamples()[i + offset] * window_hamming[i], 0);
+		VA2[i] = Vertex(Vector2f(0, 250) + Vector2f(i / (float)bufferSize * 700, samples_hamming[i].real() * 0.005), Color::Color(255, 0, 0));
 	}
 }
 //------------------------TRIMMED------------------------
@@ -80,6 +80,8 @@ void SoundProcessor::set_samples_hamming_trimmed() {
 		VA2[i] = Vertex(Vector2f(0, 250) + Vector2f(i, samples_hamming[i].real() * 0.005), Color::Color(0, 0, 255));
 	}
 }
+
+
 void SoundProcessor::fft(valarray<complex<double>>& data) {
 	const int n = data.size();
 	if (n <= 1) return;

@@ -12,8 +12,8 @@ class SoundProcessor
 public:
 	//Constructor
 	//name - name of the song you want to play
-	SoundProcessor( std::string const& name): songName(name), sampleCount(0), sampleRate(0) {}
-	void initialize();
+	SoundProcessor(): sampleCount(0), sampleRate(0) {}
+	void initialize(const std::string song_name);
 	void draw(sf::RenderWindow& window);
 	void update();
 private:
@@ -39,7 +39,7 @@ private:
 
 
 	//Song information
-	std::string songName;
+	std::string songName = "";
 	sf::SoundBuffer soundBuffer;
 	sf::Sound song;
 	int sampleRate;
@@ -47,7 +47,7 @@ private:
 	const int bufferSize = 16384;//  implicit value is not needed //wont play songs that have less than 16384 samples
 
 	//Helper constants
-	const std::string songPath = "Ressources/";
+	const std::string songPath = "Resources/Songs/";
 	const float PI = 3.14159265358979323846;
 };
 

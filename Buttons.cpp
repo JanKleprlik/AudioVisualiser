@@ -241,4 +241,12 @@ void AddSongButton::activate(Menu& menu)
 	menu.add_song(song_name);
 }
 
+#pragma endregion
+
+#pragma region Unclickable Button
+void UnclickableButton::activate(Menu& menu)
+{
+	//Nothing to do here
+}
+
 #pragma endregion 

@@ -23,7 +23,7 @@ public:
 	virtual void draw(float x, float y, sf::RenderWindow& window) = 0;  //draws the button at centered position [x,y]
 	virtual void draw(sf::RenderWindow& window) = 0;					//draws the button at internaly set position
 	virtual void set_position(float x, float y) = 0;					//sets the position of a button (origin is at the center)
-	virtual void activate(Menu& menu);// = 0;
+	virtual void activate(Menu& menu) = 0;
 
 protected:
 	AbstractButton(float x, float y) : x_dim(x), y_dim(y), x_pos(0.f), y_pos(0.f) {};
@@ -134,13 +134,14 @@ public:
 class PlayButton final : public TextButton
 {
 public :
-	void activate(Menu& menu) override;
-	
+	PlayButton(std::string text_, int size) : TextButton(text_, size) {};
+	void activate(Menu& menu) override;	
 };
 
 class IncrementButton final : public TriangleButton
 {
 public:
+	IncrementButton(float x) : TriangleButton(x) {};
 	void set_increment(int x)
 	{
 		inc = x;
@@ -154,18 +155,28 @@ private:
 class ModeButton final : public RoundButton
 {
 public:
+	ModeButton(float x, float y) : RoundButton(x, y) {};
 	void activate(Menu& menu) override;
 };
 
 class SongButton final : public RoundButton
 {
 public:
+	SongButton(float x, float y) : RoundButton(x, y) {};
 	void activate(Menu& menu) override;
 };
 
 class AddSongButton final : public PlusButton
 {
 public:
+	AddSongButton(float x, float y) : PlusButton(x, y) {};
+	void activate(Menu& menu) override;
+};
+
+class UnclickableButton final : public RoundButton
+{
+public:
+	UnclickableButton(float x, float y) : RoundButton(x, y) {};
 	void activate(Menu& menu) override;
 };
 #pragma endregion 
@@ -179,21 +190,25 @@ public:
 
 	//Buttons
 	std::vector<std::unique_ptr<AbstractButton>> buttons;
+	std::vector<std::unique_ptr<SongButton>> song_buttons;
 	
 	//Button functions
 	bool active = true;
 	void change_page(int i);
 	void set_mode(const std::string& mode);
 	void set_song(const std::string& song);
+	std::string& get_song();
+	std::string& get_mode();
 	void add_song(const std::string& song);
 
 private:
 	SongDatabase database;
 	std::vector<std::string> modes = std::vector<std::string>{ "Amplitude","Radio","Map","Stripes","Chaos","Space" };
+	void update_buttons();
 
 	//button command variables
-	std::string chosen_song;
-	std::string chosen_mode;
+	std::string chosen_song = "animals.wav";
+	std::string chosen_mode = "Amplitude.wav";
 	int song_page = 0;
 	
 	// Helper variables & constants
@@ -204,35 +219,6 @@ private:
 	sf::Color active_grey = sf::Color(209, 209, 209, 80);
 	sf::Color black = sf::Color(0, 0, 0);
 	sf::Color white = sf::Color(255, 255, 255);
-
-
-
-	
-
-	//TODO: DELETE THIS LATER AND EVERYTHING CORRESPONIGN IN .cpp
-	
-	//sprites
-	sf::Vector2f table_move = sf::Vector2f(454.f, 0.f);
-	sf::CircleShape big_circ_left = sf::CircleShape(50.f, 30);
-	sf::CircleShape big_circ_right = sf::CircleShape(50.f, 30);
-	sf::CircleShape small_circ_left = sf::CircleShape(25.f, 30);
-	sf::CircleShape small_circ_right = sf::CircleShape(25.f, 30);
-	sf::CircleShape triangle = sf::CircleShape(25.f, 3);
-	sf::RectangleShape big_rect = sf::RectangleShape(sf::Vector2f(210.f, 100.f));
-	sf::RectangleShape small_rect = sf::RectangleShape(sf::Vector2f(260.f, 50.f));
-
-	sf::RectangleShape plus = sf::RectangleShape(sf::Vector2f(50.f, 50.f));
-	sf::RectangleShape plus_cover = sf::RectangleShape(sf::Vector2f(20.f, 20.f));
-
-	sf::Text text = sf::Text("", font, 24);
-	
-	// Helper funcitons
-//void draw_headers(float x, float y, sf::RenderWindow& window);
-	void draw_big_button(float x, float y, sf::RenderWindow& window, const std::string& text);
-	void draw_song_table(float x, float y, sf::RenderWindow& window);
-	void draw_mode_table(float x, float y, sf::RenderWindow& window);
-	void draw_song_controller(float x, float y, sf::RenderWindow& window);
-	//void draw_vizualize_button(float x, float y, sf::RenderWindow& window, const std::string& text);
 };
 
 #pragma endregion 
