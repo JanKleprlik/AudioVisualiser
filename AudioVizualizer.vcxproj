@@ -167,16 +167,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Buttons.cpp" />
     <ClCompile Include="AudioVizualizer.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="SongDatabase.cpp" />
     <ClCompile Include="SoundProcessor.cpp" />
-    <ClCompile Include="UGI.cpp" />
     <ClCompile Include="Vizualizer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Buttons.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="SongDatabase.h" />
     <ClInclude Include="SoundProcessor.h" />
-    <ClInclude Include="UGI.h" />
     <ClInclude Include="Vizualizer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

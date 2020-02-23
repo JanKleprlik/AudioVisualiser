@@ -24,10 +24,13 @@
     <ClCompile Include="SoundProcessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UGI.cpp">
+    <ClCompile Include="Vizualizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vizualizer.cpp">
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Buttons.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,10 +41,13 @@
     <ClInclude Include="SoundProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UGI.h">
+    <ClInclude Include="Vizualizer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vizualizer.h">
+    <ClInclude Include="Menu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Buttons.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
