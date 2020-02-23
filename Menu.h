@@ -43,7 +43,7 @@ public:
 	 * x - widht
 	 * y - height
 	 */
-	RoundButton(float x, float y) : AbstractButton(x, y) //x -> width, y -> height
+	RoundButton(float x, float y) : AbstractButton(x, y) //x -> WIDTH, y -> height
 	{
 		circ_left = sf::CircleShape(y_dim / 2);
 		circ_right = sf::CircleShape(y_dim / (2));
@@ -193,7 +193,7 @@ public:
 	std::vector<std::unique_ptr<SongButton>> song_buttons;
 	
 	//Button functions
-	bool active = true;
+	bool active = false;	//TODO: set to false before deploying
 	void change_page(int i);
 	void set_mode(const std::string& mode);
 	void set_song(const std::string& song);
@@ -207,7 +207,7 @@ private:
 	void update_buttons();
 
 	//button command variables
-	std::string chosen_song = "animals.wav";
+	std::string chosen_song = "edge.wav";		//TODO: set to menu.wav before deploying
 	std::string chosen_mode = "Amplitude.wav";
 	int song_page = 0;
 	

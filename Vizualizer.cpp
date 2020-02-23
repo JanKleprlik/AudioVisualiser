@@ -53,9 +53,7 @@ void Vizualizer::run()
 		}
 
 		
-		//time = clock.getElapsedTime();
-		//int fps = i / time.asSeconds();
-		//cout << fps << endl;
+
 		window.clear();
 		if (is_menu_active)
 		{
@@ -80,7 +78,14 @@ void Vizualizer::run()
 
 
 		window.display();
-		//i++;
+
+		//FPS
+		/*/
+		time = clock.getElapsedTime();
+		int fps = i / time.asSeconds();
+		cout << fps << endl;
+		i++;
+		/**/
 	}
 }
 

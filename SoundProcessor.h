@@ -1,21 +1,19 @@
 #pragma once
-#include <fstream>
 #include <complex>;
 #include <valarray>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-//#include <SFML/Window.hpp>
 
 
 class SoundProcessor
 {
 public:
 	//Constructor
-	//name - name of the song you want to play
 	SoundProcessor(): sampleCount(0), sampleRate(0) {}
 	void initialize(const std::string song_name);
 	void draw(sf::RenderWindow& window);
 	void update();
+	
 private:
 	//drawables
 	sf::VertexArray VA1;
@@ -30,7 +28,11 @@ private:
 	void set_samples_hamming_trimmed();
 	void set_samples_trimmed();
 
+	//Colors
+	sf::Color blue = sf::Color(0, 0, 255); 
 
+
+	
 	//FFT information
 	std::vector<float> window_hamming; //hamming window for clearing input data
 	std::vector<std::complex<double>> samples_hamming;	//input data multiplied by hamming window

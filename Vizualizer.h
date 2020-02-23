@@ -17,6 +17,6 @@ private:
 	SoundProcessor processor;
 	
 	bool is_menu_active = true;
-	const int FPS = 60;
+	const int FPS = 40;
 };
 
