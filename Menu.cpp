@@ -19,8 +19,6 @@ void Menu::draw(RenderWindow& window)
 	{
 		song_button->draw(window);
 	}
-
-
 }
 
 Menu::Menu()
@@ -42,7 +40,11 @@ Menu::Menu()
 		cout << "ERROR: was unable to load font \"sensation.tff\"" << endl;
 		EXIT_FAILURE;
 	}
+	//loading music to play
+	
+	
 
+	//setting sprites for drawing
 	#pragma region SONGS COLLUMN
 	{
 		constexpr float x = 285.f;

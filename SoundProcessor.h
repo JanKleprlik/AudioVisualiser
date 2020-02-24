@@ -30,8 +30,6 @@ private:
 
 	//Colors
 	sf::Color blue = sf::Color(0, 0, 255); 
-
-
 	
 	//FFT information
 	std::vector<float> window_hamming; //hamming window for clearing input data
