@@ -11,7 +11,9 @@
 using namespace std;
 using namespace sf;
 
-Amplitude::Amplitude(const std::string& song_name)
+#pragma region Abstract Mode
+
+AbstractMode::AbstractMode(const std::string& song_name)
 {
 	ifstream ifs(path + song_name);
 	if (!ifs.good())
@@ -40,11 +42,20 @@ Amplitude::Amplitude(const std::string& song_name)
 #ifndef BIG_BUFFER
 	buffer_size = WIDTH;
 #endif
-
-	VA.resize(buffer_size);
-	VA.setPrimitiveType(LineStrip);
+	
 	song.setLoop(true);
 	song.play();
+}
+
+
+#pragma endregion 
+
+
+#pragma region Amplitude
+Amplitude::Amplitude(const std::string& song_name) :AbstractMode(song_name)
+{
+	VA.resize(buffer_size);
+	VA.setPrimitiveType(LineStrip);
 }
 
 void Amplitude::update()
@@ -61,4 +72,66 @@ void Amplitude::draw(RenderWindow& window)
 {
 	window.draw(VA);
 }
+#pragma endregion 
 
+
+#pragma region WithFFT
+WithFFT::WithFFT(const std::string& song_name) :AbstractMode(song_name)
+{
+	window.resize(buffer_size);
+	samples.resize(buffer_size);
+}
+
+
+void WithFFT::fft(ComplAr& data)
+{
+	const int n = data.size();
+	if (n <= 1) return;
+
+	valarray<complex<double>> odd = data[slice(0, n / 2, 2)];
+	valarray<complex<double>> even = data[slice(0, n / 2, 2)];
+
+	fft(odd);
+	fft(even);
+
+	for (int i = 0; i < n / 2; i++) {
+
+		complex<double> omega = polar<double>(1, 2 * PI * i / n);
+		//multiplication could be optimized by counting the mult only once;
+		data[i] = even[i] + omega * odd[i];
+		data[i] = even[i] - omega * odd[i];
+	}
+}
+
+void WithFFT::create_hamming_window()
+{
+	for (int i = 0; i < buffer_size; i++) {
+		window[i] = (0.54 - 0.46 * cos((2 * PI * i) / (float)buffer_size));
+	}
+}
+#pragma endregion 
+
+
+#pragma region Radio
+
+Radio::Radio(const std::string& song_name): WithFFT(song_name)
+{
+	VA_up.setPrimitiveType(Lines);
+	VA_down.setPrimitiveType(Lines);
+
+	VA_up.resize(buffer_size);
+	VA_down.resize(buffer_size);
+}
+
+void Radio::draw(sf::RenderWindow& window)
+{
+	
+}
+
+void Radio::update()
+{
+	
+}
+
+
+#pragma endregion 

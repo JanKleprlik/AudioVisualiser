@@ -14,6 +14,7 @@ class AbstractMode
 {
 public:
 	virtual ~AbstractMode() {};
+	AbstractMode(const std::string& song_name);
 	virtual void draw(sf::RenderWindow& window) = 0;
 	virtual void update() = 0;
 protected:
@@ -43,10 +44,22 @@ private:
 class WithFFT : public AbstractMode
 {
 public:
+	WithFFT(const std::string& song_name);
 	void fft(ComplAr& data);
 	void create_hamming_window();
 	
 private:
 	std::vector<float> window;
 	ComplAr samples;
+};
+
+class Radio : public WithFFT
+{
+public:
+	Radio(const std::string& song_name);
+	void draw(sf::RenderWindow& window) override;
+	void update() override;
+private:
+	sf::VertexArray VA_up;
+	sf::VertexArray VA_down;
 };
