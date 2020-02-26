@@ -1,3 +1,5 @@
+Audio - LSD.wav
+Genius - LSD.wav
 animals.wav
 ass.wav
 canary.wav

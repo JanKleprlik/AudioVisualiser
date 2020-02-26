@@ -18,7 +18,6 @@ void Vizualizer::run()
 	{
 		while(window.pollEvent(event))
 		{
-
 			#pragma region Event handling
 			if (event.type == Event::Closed)
 			{
@@ -51,27 +50,29 @@ void Vizualizer::run()
 			}
 			#pragma endregion 
 		}
-
 		
-
 		window.clear();
 		if (is_menu_active)
 		{
-			//draw menu
 			menu.draw(window);
 			is_menu_active = menu.active;
 			if (!is_menu_active)
 			{
-				processor.initialize(menu.get_song());
+
+				initialize_mode(menu.get_mode(), menu.get_song());
+				//processor.initialize(menu.get_song());
+				menu.quit();
 			}
 		}
 		else
 		{
 			//cout << menu.active << " : " << menu.get_mode() << " : " << menu.get_song() << endl;
 			//draw vizualization
-			processor.update();
+			//processor.update();
+			mode->update();
 			window.clear();
-			processor.draw(window);
+			mode->draw(window);
+			//processor.draw(window);
 			
 		}
 
@@ -96,11 +97,16 @@ void Vizualizer::run()
 Vizualizer::Vizualizer()
 {
 	ContextSettings settings;
-	settings.antialiasingLevel = 8;
+	settings.antialiasingLevel = 4;
 	
 	const VideoMode desktop = VideoMode::getDesktopMode();
 	window.create(VideoMode(WIDTH, HEIGHT, desktop.bitsPerPixel), "Feel The Beat",Style::Default, settings);
 	window.setFramerateLimit(FPS);
+}
+
+void Vizualizer::initialize_mode(const std::string& mode_name, const std::string& song_name)
+{
+	mode = std::make_unique<Amplitude>(song_name);
 }
 
 

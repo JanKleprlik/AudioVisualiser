@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
 #include "SongDatabase.h"
+#include <SFML/Audio.hpp>
 
 //Forward declaration
 class Menu;
@@ -193,18 +194,24 @@ public:
 	std::vector<std::unique_ptr<SongButton>> song_buttons;
 	
 	//Button functions
-	bool active = false;	//TODO: set to false before deploying
+	bool active = true;	//TODO: set to false before deploying
 	void change_page(int i);
 	void set_mode(const std::string& mode);
 	void set_song(const std::string& song);
 	std::string& get_song();
 	std::string& get_mode();
 	void add_song(const std::string& song);
+	void quit();
 
 private:
 	SongDatabase database;
 	std::vector<std::string> modes = std::vector<std::string>{ "Amplitude","Radio","Map","Stripes","Chaos","Space" };
 	void update_buttons();
+
+	//menu song
+	sf::SoundBuffer song_buffer;
+	sf::Sound song;
+	const std::string song_name = "Resources/Songs/menu.wav";
 
 	//button command variables
 	std::string chosen_song = "edge.wav";		//TODO: set to menu.wav before deploying

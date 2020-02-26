@@ -170,12 +170,14 @@
     <ClCompile Include="Buttons.cpp" />
     <ClCompile Include="AudioVizualizer.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Modes.cpp" />
     <ClCompile Include="SongDatabase.cpp" />
     <ClCompile Include="SoundProcessor.cpp" />
     <ClCompile Include="Vizualizer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="Modes.h" />
     <ClInclude Include="SongDatabase.h" />
     <ClInclude Include="SoundProcessor.h" />
     <ClInclude Include="Vizualizer.h" />

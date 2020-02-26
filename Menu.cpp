@@ -135,6 +135,11 @@ Menu::Menu()
 		
 	}
 	#pragma endregion
+
+	song_buffer.loadFromFile(song_name);
+	song.setBuffer(song_buffer);
+	song.setLoop(true);
+	song.play();
 }
 
 void Menu::add_song(const std::string& song)
@@ -178,4 +183,9 @@ std::string& Menu::get_mode()
 std::string& Menu::get_song()
 {
 	return chosen_song;
+}
+
+void Menu::quit()
+{
+	song.stop();
 }
