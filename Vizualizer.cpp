@@ -106,7 +106,5 @@ Vizualizer::Vizualizer()
 
 void Vizualizer::initialize_mode(const std::string& mode_name, const std::string& song_name)
 {
-	mode = std::make_unique<Amplitude>(song_name);
+	mode = std::make_unique<Radio>(song_name); //TODO: Change to 'mode_name' before deployement
 }
-
-

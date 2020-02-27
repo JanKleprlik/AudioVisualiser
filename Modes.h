@@ -48,9 +48,10 @@ public:
 	void fft(ComplAr& data);
 	void create_hamming_window();
 	
-private:
+protected:
+	std::vector<Complex> samples;
+	ComplAr bin;
 	std::vector<float> window;
-	ComplAr samples;
 };
 
 class Radio : public WithFFT

@@ -6,7 +6,7 @@
 #define HEIGHT 768
 #define BUFFER_SIZE 16384
 
-//#define BIG_BUFFER
+#define BIG_BUFFER
 
 using namespace std;
 using namespace sf;
@@ -78,8 +78,9 @@ void Amplitude::draw(RenderWindow& window)
 #pragma region WithFFT
 WithFFT::WithFFT(const std::string& song_name) :AbstractMode(song_name)
 {
-	window.resize(buffer_size);
 	samples.resize(buffer_size);
+
+	create_hamming_window();
 }
 
 
@@ -88,25 +89,25 @@ void WithFFT::fft(ComplAr& data)
 	const int n = data.size();
 	if (n <= 1) return;
 
-	valarray<complex<double>> odd = data[slice(0, n / 2, 2)];
-	valarray<complex<double>> even = data[slice(0, n / 2, 2)];
+	ComplAr odd = data[slice(1, n / 2, 2)];
+	ComplAr even = data[slice(0, n / 2, 2)];
 
 	fft(odd);
 	fft(even);
 
 	for (int i = 0; i < n / 2; i++) {
 
-		complex<double> omega = polar<double>(1, 2 * PI * i / n);
+		Complex omega = polar<double>(1.0, -2 * PI * i / n);
 		//multiplication could be optimized by counting the mult only once;
 		data[i] = even[i] + omega * odd[i];
-		data[i] = even[i] - omega * odd[i];
+		data[i+n/2] = even[i] - omega * odd[i];
 	}
 }
 
 void WithFFT::create_hamming_window()
 {
 	for (int i = 0; i < buffer_size; i++) {
-		window[i] = (0.54 - 0.46 * cos((2 * PI * i) / (float)buffer_size));
+		window.push_back(0.54 - 0.46 * cos((2 * PI * i) / (float)buffer_size));
 	}
 }
 #pragma endregion 
@@ -119,18 +120,41 @@ Radio::Radio(const std::string& song_name): WithFFT(song_name)
 	VA_up.setPrimitiveType(Lines);
 	VA_down.setPrimitiveType(Lines);
 
-	VA_up.resize(buffer_size);
-	VA_down.resize(buffer_size);
+	//VA_up.resize(buffer_size);
+	//VA_down.resize(buffer_size);
 }
 
 void Radio::draw(sf::RenderWindow& window)
 {
-	
+	window.draw(VA_up);
+	window.draw(VA_down);
 }
 
 void Radio::update()
 {
+	int offset = song.getPlayingOffset().asSeconds() * sample_rate;
+	for (int i = 0; i < buffer_size; i++)
+	{
+		samples[i] = Complex(buffer.getSamples()[i + offset] * window[i],0);
+	}
 	
+	VA_up.clear();
+	VA_down.clear();
+	
+	bin = ComplAr(samples.data(), buffer_size);
+	fft(bin);
+
+	const Vector2f starting_position(0.f, 384.f);
+	for (float i = 3.f; i < min((float)buffer_size/2.f, 20000.f); i *= 1.01)
+	{
+		Vector2f position(log(i) / log(min((float)buffer_size/2.f, 20000.f)), abs(bin[(int)i]));
+		VA_up.append(Vertex(starting_position + Vector2f(position.x * 800, -position.y / 100000000 * 500), Color::White));
+		VA_up.append(Vertex(starting_position + Vector2f(position.x * 800,0), Color::White));
+
+		VA_down.append(Vertex(starting_position + Vector2f(position.x * 800, 0),Color(254,254,254,100)));
+		VA_down.append(Vertex(starting_position + Vector2f(position.x * 800, position.y / 100000000 * 500), Color::White));
+
+	}
 }
 
 

@@ -194,7 +194,7 @@ public:
 	std::vector<std::unique_ptr<SongButton>> song_buttons;
 	
 	//Button functions
-	bool active = true;	//TODO: set to false before deploying
+	bool active = false;	//TODO: set to false before deploying
 	void change_page(int i);
 	void set_mode(const std::string& mode);
 	void set_song(const std::string& song);
@@ -214,7 +214,7 @@ private:
 	const std::string song_name = "Resources/Songs/menu.wav";
 
 	//button command variables
-	std::string chosen_song = "edge.wav";		//TODO: set to menu.wav before deploying
+	std::string chosen_song = "Audio - LSD.wav";		//TODO: set to menu.wav before deploying
 	std::string chosen_mode = "Amplitude.wav";
 	int song_page = 0;
 	
