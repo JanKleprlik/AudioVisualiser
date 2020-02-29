@@ -117,7 +117,7 @@ void WithFFT::create_hamming_window()
 
 Radio::Radio(const std::string& song_name): WithFFT(song_name)
 {
-	VA_up.setPrimitiveType(Lines);
+	VA_up.setPrimitiveType(LineStrip);
 	VA_down.setPrimitiveType(Lines);
 
 	//VA_up.resize(buffer_size);
@@ -143,19 +143,36 @@ void Radio::update()
 	
 	bin = ComplAr(samples.data(), buffer_size);
 	fft(bin);
-
+	
 	const Vector2f starting_position(0.f, 384.f);
+	generate_bars_lr(VA_up,starting_position,1);
+	/*/
+
 	for (float i = 3.f; i < min((float)buffer_size/2.f, 20000.f); i *= 1.01)
 	{
 		Vector2f position(log(i) / log(min((float)buffer_size/2.f, 20000.f)), abs(bin[(int)i]));
-		VA_up.append(Vertex(starting_position + Vector2f(position.x * 800, -position.y / 100000000 * 500), Color::White));
-		VA_up.append(Vertex(starting_position + Vector2f(position.x * 800,0), Color::White));
+		VA_up.append(Vertex(starting_position + Vector2f(position.x * 800, -position.y / 100000000 * 500 ), Color::White));
+		//VA_up.append(Vertex(starting_position + Vector2f(position.x * 800,0), Color::White));
 
 		VA_down.append(Vertex(starting_position + Vector2f(position.x * 800, 0),Color(254,254,254,100)));
 		VA_down.append(Vertex(starting_position + Vector2f(position.x * 800, position.y / 100000000 * 500), Color::White));
-
 	}
+	/**/
 }
+ void WithFFT::generate_bars_lr(sf::VertexArray& VA, const sf::Vector2f& starting_position, int size)
+ {
+	 int x_position = 50;
+	 for (float i = 3.f; i < buffer_size/2; i *= 1.01)
+	 {
+		 Vector2f position(x_position, abs(bin[(int)i]));
+		 VA.append(Vertex(starting_position + Vector2f(position.x , -position.y / 100000000 * 500 ), Color::White));
+		// VA.append(Vertex(starting_position + Vector2f(position.x, 0), Color::White));
+
+		 //VA.append(Vertex(starting_position + Vector2f(position.x * 800, 0), Color(254, 254, 254, 100)));
+		 //VA.append(Vertex(starting_position + Vector2f(position.x * 800, position.y / 100000000 * 500), Color::White));
+		 x_position++;
+	 }
+ }
 
 
 #pragma endregion 

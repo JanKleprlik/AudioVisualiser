@@ -49,6 +49,9 @@ public:
 	void create_hamming_window();
 	
 protected:
+	void generate_bars_lr(sf::VertexArray& VA,const sf::Vector2f& starting_position, int size);
+
+	
 	std::vector<Complex> samples;
 	ComplAr bin;
 	std::vector<float> window;

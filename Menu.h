@@ -194,7 +194,7 @@ public:
 	std::vector<std::unique_ptr<SongButton>> song_buttons;
 	
 	//Button functions
-	bool active = false;	//TODO: set to false before deploying
+	bool active = true;	//TODO: set to false before deploying
 	void change_page(int i);
 	void set_mode(const std::string& mode);
 	void set_song(const std::string& song);
