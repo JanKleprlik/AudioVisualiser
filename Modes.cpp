@@ -145,7 +145,8 @@ void Radio::update()
 	fft(bin);
 	
 	const Vector2f starting_position(0.f, 384.f);
-	generate_bars_lr(VA_up,starting_position,1);
+	generate_bars_lr_up(VA_up,starting_position, WIDTH);
+	//frequency_spectrum_lr(VA_up, starting_position);
 	/*/
 
 	for (float i = 3.f; i < min((float)buffer_size/2.f, 20000.f); i *= 1.01)
@@ -159,19 +160,25 @@ void Radio::update()
 	}
 	/**/
 }
- void WithFFT::generate_bars_lr(sf::VertexArray& VA, const sf::Vector2f& starting_position, int size)
+ void WithFFT::generate_bars_lr_up(sf::VertexArray& VA, const sf::Vector2f& starting_position,size_t size)
  {
+	 size_t samples_per_pixel = buffer_size / (2 * size);
+	//TODO: I have to calculate logarithm there to get ending point of this for loop
 	 int x_position = 50;
 	 for (float i = 3.f; i < buffer_size/2; i *= 1.01)
 	 {
 		 Vector2f position(x_position, abs(bin[(int)i]));
 		 VA.append(Vertex(starting_position + Vector2f(position.x , -position.y / 100000000 * 500 ), Color::White));
-		// VA.append(Vertex(starting_position + Vector2f(position.x, 0), Color::White));
-
-		 //VA.append(Vertex(starting_position + Vector2f(position.x * 800, 0), Color(254, 254, 254, 100)));
-		 //VA.append(Vertex(starting_position + Vector2f(position.x * 800, position.y / 100000000 * 500), Color::White));
 		 x_position++;
 	 }
+ }
+
+ void WithFFT::frequency_spectrum_lr(sf::VertexArray& VA, const sf::Vector2f& starting_position)
+ {
+	for (int i = 3; i < buffer_size/2; i++)
+	{
+		VA.append(Vertex(starting_position + Vector2f(i/8, -abs(bin[(int)i]) / 100000000 * 500), Color::White));
+	}
  }
 
 

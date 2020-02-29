@@ -49,7 +49,11 @@ public:
 	void create_hamming_window();
 	
 protected:
-	void generate_bars_lr(sf::VertexArray& VA,const sf::Vector2f& starting_position, int size);
+	void generate_bars_lr_up(sf::VertexArray& VA,const sf::Vector2f& starting_position, size_t size);
+	void generate_bars_td_left(sf::VertexArray& VA, const sf::Vector2f& starting_position, size_t size);
+	void generate_bars_lr_down(sf::VertexArray& VA, const sf::Vector2f& starting_position, size_t size);
+	void generate_bars_td_right(sf::VertexArray& VA, const sf::Vector2f& starting_position, size_t size);
+	void frequency_spectrum_lr(sf::VertexArray&, const sf::Vector2f& starting_position);
 
 	
 	std::vector<Complex> samples;
