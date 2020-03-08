@@ -49,11 +49,20 @@ public:
 	void create_hamming_window();
 	
 protected:
-	void generate_bars_lr_up(sf::VertexArray& VA,const sf::Vector2f& starting_position, size_t size);
-	void generate_bars_td_left(sf::VertexArray& VA, const sf::Vector2f& starting_position, size_t size);
-	void generate_bars_lr_down(sf::VertexArray& VA, const sf::Vector2f& starting_position, size_t size);
-	void generate_bars_td_right(sf::VertexArray& VA, const sf::Vector2f& starting_position, size_t size);
-	void frequency_spectrum_lr(sf::VertexArray&, const sf::Vector2f& starting_position);
+	void update() override;
+	
+	void generate_bars_lr_up(sf::VertexArray& VA,const sf::Vector2f& starting_position);
+	void generate_bars_lr_down(sf::VertexArray& VA, const sf::Vector2f& starting_position);
+	
+	//void generate_bars_td_right(sf::VertexArray& VA, const sf::Vector2f& starting_position);
+	//void generate_bars_td_left(sf::VertexArray& VA, const sf::Vector2f& starting_position);
+
+	void generate_line_lr_up(sf::VertexArray& VA, const sf::Vector2f& starting_position);
+	void generate_line_lr_down(sf::VertexArray& VA, const sf::Vector2f& starting_position);
+
+	void frequency_spectrum_lr(sf::VertexArray& VA, const sf::Vector2f& starting_position);
+
+	void genereate_map(sf::VertexArray& VA, const sf::Vector2f& starting_position);
 
 	
 	std::vector<Complex> samples;
@@ -70,4 +79,14 @@ public:
 private:
 	sf::VertexArray VA_up;
 	sf::VertexArray VA_down;
+};
+
+class Map : public WithFFT
+{
+public:
+	Map(const std::string& song_name);
+	void draw(sf::RenderWindow& window) override;
+	void update() override;
+private:
+	sf::VertexArray VA;
 };
