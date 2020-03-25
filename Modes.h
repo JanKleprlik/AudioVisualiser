@@ -21,7 +21,7 @@ protected:
 	sf::SoundBuffer buffer;
 	sf::Sound song;
 	
-	int sample_rate = 0;
+	unsigned int sample_rate = 0;
 	int sample_count = 0;
 	int buffer_size = 0;
 
@@ -62,9 +62,9 @@ protected:
 
 	void frequency_spectrum_lr(sf::VertexArray& VA, const sf::Vector2f& starting_position);
 
-	void genereate_map(sf::VertexArray& VA, const sf::Vector2f& starting_position);
+	void generate_map(sf::VertexArray& VA, const sf::Vector2f& starting_position);
 
-	
+	std::vector<sf::Vertex> map;
 	std::vector<Complex> samples;
 	ComplAr bin;
 	std::vector<float> window;
@@ -85,6 +85,16 @@ class Map : public WithFFT
 {
 public:
 	Map(const std::string& song_name);
+	void draw(sf::RenderWindow& window) override;
+	void update() override;
+private:
+	sf::VertexArray VA;
+};
+
+class Stripes : public WithFFT
+{
+public:
+	Stripes(const std::string& song_name);
 	void draw(sf::RenderWindow& window) override;
 	void update() override;
 private:

@@ -167,7 +167,7 @@ void WithFFT::generate_bars_lr_down(sf::VertexArray& VA, const sf::Vector2f& sta
 	{
 		Vector2f position(x_start, abs(bin[(int)i]));
 		VA.append(Vertex(starting_position + Vector2f(position.x, position.y / 100000000 * 500), Color(209, 209, 209)));
-		VA.append(Vertex(starting_position + Vector2f(position.x, 0), Color(254, 254, 254, 100)));
+		VA.append(Vertex(starting_position + Vector2f(position.x, 0), Color(254, 254, 254, 60)));
 		//position.y is divided by such a large number to scale it into reasonable interval
 		//multiplying sets the maximum height in pixels
 		x_start++;
@@ -176,8 +176,8 @@ void WithFFT::generate_bars_lr_down(sf::VertexArray& VA, const sf::Vector2f& sta
 void WithFFT::generate_bars_lr_up(sf::VertexArray& VA, const sf::Vector2f& starting_position)
 {
 	int stop_position = log(buffer_size / (2 * 3)) / log(1.01);
-	//buffer_size is divided by 2 for working only on first half of spectrum (second is the same)
-	//, and by three to avoid first few noisi frequencies
+	//buffer_size is divided by 2 for working only on first half of spectrum (second half is the same)
+	//, and by three to avoid first few noisy frequencies
 	int x_start = (WIDTH - stop_position) / 2;
 	for (float i = 3.f; i < buffer_size / 2; i *= 1.01)
 	{
@@ -198,8 +198,36 @@ void WithFFT::frequency_spectrum_lr(sf::VertexArray& VA, const sf::Vector2f& sta
 	}
 }
 
-void WithFFT::genereate_map(sf::VertexArray& VA, const sf::Vector2f& starting_position)
+void WithFFT::generate_map(sf::VertexArray& VA, const sf::Vector2f& starting_position)
 {
+	auto move_vec = Vector2f(-0.7, 1.3);
+	int stop_position = log(buffer_size / (2 * 3)) / log(1.01);
+	//buffer_size is divided by 2 for working only on first half of spectrum (second is the same)
+	//, and by three to avoid first few noisi frequencies
+	int x_start = (WIDTH - stop_position) / 2;
+	Vector2f position(x_start,0);
+
+	
+	//Move previously generated points
+	for (int i = 0; i < map.size(); i++)
+	{
+		map[i].position -= move_vec;
+	}
+
+	//Generate new map
+	map.push_back(Vertex(starting_position + Vector2f(position.x, -position.y / 100000000 * 500), Color(254, 254, 254, 20))); //helps with balancing height
+	for (float i = 3.f; i < (buffer_size/2)-80; i*=1.01)
+	{
+		position = Vector2f(x_start, abs(bin[(int)i]));
+		map.push_back(Vertex(starting_position + Vector2f(position.x, -position.y / 100000000 * 500), Color(254, 254, 254, 20)));
+		x_start++;
+	}
+	map.push_back(Vertex(starting_position + Vector2f(position.x, -position.y / 100000000 * 500), Color(254, 254, 254, 20))); //helps with balancing height
+	
+	VA.clear();
+	for (int i = max((double)0,map.size() - 3e5); i < map.size(); i++)
+	{
+		VA.append(map[i]);	}
 	
 }
 
@@ -241,7 +269,7 @@ void Radio::update()
 #pragma region Map
 Map::Map(const std::string& song_name) :WithFFT(song_name)
 {
-	VA.setPrimitiveType(Points);
+	VA.setPrimitiveType(LineStrip);
 }
 void Map::draw(sf::RenderWindow& window)
 {
@@ -253,11 +281,17 @@ void Map::update()
 	WithFFT::update();
 	VA.clear();
 
-	const Vector2f starting_position(0.f, 384.f);
+	const Vector2f starting_position(0.f, 700.f);
 
-	generate_map(VA, starting_position); //TODO:generate_map funciton in WithFFT class
+	generate_map(VA, starting_position);
 }
 
 
 
 #pragma endregion 
+
+#pragma region Stripes
+
+
+
+#pragma endregion
