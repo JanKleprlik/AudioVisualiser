@@ -1,5 +1,6 @@
 Audio - LSD.wav
 Genius - LSD.wav
+Mozart.wav
 animals.wav
 ass.wav
 canary.wav
@@ -14,3 +15,7 @@ ppl.wav
 menu.wav
 sifflet.wav
 sintra.wav
+Apashe.wav
+Aevion.wav
+Pogo.wav
+Alfons.wav

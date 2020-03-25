@@ -214,8 +214,8 @@ private:
 	const std::string song_name = "Resources/Songs/menu.wav";
 
 	//button command variables
-	std::string chosen_song = "Audio - LSD.wav";		//TODO: set to menu.wav before deploying
-	std::string chosen_mode = "Amplitude.wav";
+	std::string chosen_song = "Alfons.wav";		//TODO: set to menu.wav before deploying
+	std::string chosen_mode = "Amplitude";			//TODO: set chosen_mode to Radio before deploying
 	int song_page = 0;
 	
 	// Helper variables & constants

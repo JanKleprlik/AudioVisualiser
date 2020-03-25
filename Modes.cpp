@@ -203,7 +203,7 @@ void WithFFT::generate_map(sf::VertexArray& VA, const sf::Vector2f& starting_pos
 	auto move_vec = Vector2f(-0.7, 1.3);
 	int stop_position = log(buffer_size / (2 * 3)) / log(1.01);
 	//buffer_size is divided by 2 for working only on first half of spectrum (second is the same)
-	//, and by three to avoid first few noisi frequencies
+	//, and by three to avoid first few noisy frequencies
 	int x_start = (WIDTH - stop_position) / 2;
 	Vector2f position(x_start,0);
 
@@ -222,7 +222,7 @@ void WithFFT::generate_map(sf::VertexArray& VA, const sf::Vector2f& starting_pos
 		map.push_back(Vertex(starting_position + Vector2f(position.x, -position.y / 100000000 * 500), Color(254, 254, 254, 20)));
 		x_start++;
 	}
-	map.push_back(Vertex(starting_position + Vector2f(position.x, -position.y / 100000000 * 500), Color(254, 254, 254, 20))); //helps with balancing height
+	map.push_back(Vertex(starting_position + Vector2f(position.x, -0 / 100000000 * 500), Color(254, 254, 254, 20))); //helps with balancing height
 	
 	VA.clear();
 	for (int i = max((double)0,map.size() - 3e5); i < map.size(); i++)
@@ -291,6 +291,10 @@ void Map::update()
 #pragma endregion 
 
 #pragma region Stripes
+void Stripes::update()
+{
+	WithFFT::update();
+}
 
 
 
