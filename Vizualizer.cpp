@@ -107,5 +107,5 @@ Vizualizer::Vizualizer()
 void Vizualizer::initialize_mode(const std::string& mode_name, const std::string& song_name)
 {
 	
-	mode = std::make_unique<Map>(song_name); //TODO: Change to 'mode_name' before deployement -switch is the way I think
+	mode = std::make_unique<Stripes>(song_name); //TODO: Change to 'mode_name' before deployement -switch is the way I think
 }

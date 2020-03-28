@@ -53,9 +53,6 @@ protected:
 	
 	void generate_bars_lr_up(sf::VertexArray& VA,const sf::Vector2f& starting_position);
 	void generate_bars_lr_down(sf::VertexArray& VA, const sf::Vector2f& starting_position);
-	
-	//void generate_bars_td_right(sf::VertexArray& VA, const sf::Vector2f& starting_position);
-	//void generate_bars_td_left(sf::VertexArray& VA, const sf::Vector2f& starting_position);
 
 	void generate_line_lr_up(sf::VertexArray& VA, const sf::Vector2f& starting_position);
 	void generate_line_lr_down(sf::VertexArray& VA, const sf::Vector2f& starting_position);
@@ -64,10 +61,13 @@ protected:
 
 	void generate_map(sf::VertexArray& VA, const sf::Vector2f& starting_position);
 
+	//void generate_stripe(const int& velocity, const sf::Vector2f& position, const sf::RectangleShape& stripe);
+	//void generate_stripes(const int& sub_bass,const int& bass, const int& low_midrange, const int&  midrange, const int& upper_midrange, const int& presence, const int& brillance);
 	std::vector<sf::Vertex> map;
 	std::vector<Complex> samples;
 	ComplAr bin;
 	std::vector<float> window;
+
 };
 
 class Radio : public WithFFT
@@ -98,5 +98,52 @@ public:
 	void draw(sf::RenderWindow& window) override;
 	void update() override;
 private:
+	std::vector<sf::RectangleShape> stripes;
 	sf::VertexArray VA;
+	
+	
+	int sub_bass = 0;			//20-60 Hz
+	int bass = 0;				//60-250 Hz
+	int low_midrange = 0;		//250-500 Hz
+	int midrange = 0;			//500-2000 Hz
+	int upper_midrange = 0;		//2000-4000 Hz
+	int presence = 0;			//4000-6000 Hz
+	int brillance = 0;			//6000-20000 Hz
+
+
+	int old_sub_bass = 0;			//20-60 Hz
+	int old_bass = 0;				//60-250 Hz
+	int old_low_midrange = 0;		//250-500 Hz
+	int old_midrange = 0;			//500-2000 Hz
+	int old_upper_midrange = 0;		//2000-4000 Hz
+	int old_presence = 0;			//4000-6000 Hz
+	int old_brillance = 0;			//6000-20000 Hz
+
+
+	int avg_sub_bass = 0;			//20-60 Hz
+	int avg_bass = 0;				//60-250 Hz
+	int avg_low_midrange = 0;		//250-500 Hz
+	int avg_midrange = 0;			//500-2000 Hz
+	int avg_upper_midrange = 0;		//2000-4000 Hz
+	int avg_presence = 0;			//4000-6000 Hz
+	int avg_brillance = 0;			//6000-20000 Hz
+	void update_ranges();
+	void update_positions();
+	void create_stripes();
+
+
+	//updates new_sum minus old_sum from frequecny low to high
+	void update_freq_range(const int& low,const int& high,int& new_sum, int& old_sum, int& avg);
+
+	/**/
+	// constants
+
+	const sf::RectangleShape stripe_sub_bass = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
+	const sf::RectangleShape stripe_bass = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
+	const sf::RectangleShape stripe_lower_midrange = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
+	const sf::RectangleShape stripe_midrange = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
+	const sf::RectangleShape stripe_upper_midrange = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
+	const sf::RectangleShape stripe_presence = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
+	const sf::RectangleShape stripe_brillance = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
+	/**/
 };
