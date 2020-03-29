@@ -128,9 +128,9 @@ void WithFFT::generate_line_lr_up(sf::VertexArray& VA, const sf::Vector2f& start
 	//buffer_size is divided by 2 for working only on first half of spectrum (second is the same)
 	//, and by three to avoid first few noisi frequencies
 	int x_start = (WIDTH - stop_position) / 2;
-	for (float i = 3.f; i < buffer_size / 2; i *= 1.01)
+	for (float i = 3.f; i < buffer_size/ 2.f; i *= 1.01)
 	{
-		Vector2f position(x_start, abs(bin[(int)i]));
+		const Vector2f position(x_start, abs(bin[(int)i]));
 		VA.append(Vertex(starting_position + Vector2f(position.x, -position.y / 100000000 * 500), Color::White));
 		//position.y is divided by such a large number to scale it into reasonable interval
 		//multiplying sets the maximum height in pixels
@@ -197,8 +197,8 @@ void WithFFT::frequency_spectrum_lr(sf::VertexArray& VA, const sf::Vector2f& sta
 
 void WithFFT::generate_map(sf::VertexArray& VA, const sf::Vector2f& starting_position)
 {
-	auto move_vec = Vector2f(-0.7, 1.3);
-	int stop_position = log(buffer_size / (2 * 3)) / log(1.01);
+	const auto move_vec = Vector2f(-0.9, 1.1);
+	const int stop_position = log(buffer_size / (2 * 3)) / log(1.01);
 	//buffer_size is divided by 2 for working only on first half of spectrum (second is the same)
 	//, and by three to avoid first few noisy frequencies
 	int x_start = (WIDTH - stop_position) / 2;
@@ -251,14 +251,14 @@ void Radio::update()
 	VA_up.clear();
 	VA_down.clear();
 	
-	const Vector2f starting_position(0.f, 384.f);
-	//generate_bars_lr_up(VA_up,starting_position);
-	//generate_bars_lr_down(VA_down, starting_position);
+	const Vector2f starting_position(0.f, HEIGHT/2.f);
+	generate_bars_lr_up(VA_up,starting_position);
+	generate_bars_lr_down(VA_down, starting_position);
 
 
-	generate_line_lr_up(VA_up, starting_position);
-	generate_line_lr_down(VA_down, starting_position);
-	//frequency_spectrum_lr(VA_up, starting_position);
+	//generate_line_lr_up(VA_up, starting_position);
+	//generate_line_lr_down(VA_down, starting_position);
+	//frequency_spectrum_lr(VA_up, starting_position,WIDTH,HEIGHT/2);
 }
 
 
