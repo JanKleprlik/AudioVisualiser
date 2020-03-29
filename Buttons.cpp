@@ -249,4 +249,5 @@ void UnclickableButton::activate(Menu& menu)
 	//Nothing to do here
 }
 
-#pragma endregion 
+#pragma endregion
+

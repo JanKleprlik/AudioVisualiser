@@ -1,9 +1,8 @@
 #include "Modes.h"
+#include "Vizualizer.h"
 #include <fstream>
 #include <iostream>
 
-#define WIDTH 1024
-#define HEIGHT 768
 #define BUFFER_SIZE 16384
 
 #define BIG_BUFFER
@@ -45,11 +44,11 @@ AbstractMode::AbstractMode(const std::string& song_name)
 	
 	song.setLoop(true);
 	song.play();
+	
+
+	
 }
-
-
 #pragma endregion 
-
 
 #pragma region Amplitude
 Amplitude::Amplitude(const std::string& song_name) :AbstractMode(song_name)
@@ -74,7 +73,6 @@ void Amplitude::draw(RenderWindow& window)
 }
 #pragma endregion 
 
-
 #pragma region WithFFT
 WithFFT::WithFFT(const std::string& song_name) :AbstractMode(song_name)
 {
@@ -96,7 +94,6 @@ void WithFFT::update()
 	bin = ComplAr(samples.data(), buffer_size);
 	fft(bin);
 }
-
 
 void WithFFT::fft(ComplAr& data)
 {
@@ -234,7 +231,6 @@ void WithFFT::generate_map(sf::VertexArray& VA, const sf::Vector2f& starting_pos
 
 #pragma endregion 
 
-
 #pragma region Radio
 
 Radio::Radio(const std::string& song_name): WithFFT(song_name)
@@ -292,251 +288,6 @@ void Map::update()
 
 #pragma endregion 
 
-#pragma region Stripes
-Stripes::Stripes(const std::string& song_name) : WithFFT(song_name)
-{
-	//initialize rectangles perhaps
-}
-
-void Stripes::draw(sf::RenderWindow& window)
-{
-	window.draw(stripe_sub_bass);
-	window.draw(stripe_bass);
-	window.draw(stripe_lower_midrange);
-	window.draw(stripe_midrange);
-	window.draw(stripe_upper_midrange);
-	window.draw(stripe_presence);
-	window.draw(stripe_brillance);
-
-	window.draw(VA);
-}
-
-void Stripes::update()
-{
-	WithFFT::update();
-
-	update_ranges();
-
-	create_stripes();
-	
-	//update_positions();
-
-
-
-
-	VA.clear();
-
-	const Vector2f starting_position(0.f, 384.f);
-	//frequency_spectrum_lr(VA, starting_position);
-}
-
-
-
-
-void Stripes::create_stripes()
-{
-	const int lim = 100000;
-	const int hold = 15;
-
-	if (avgs[0]/100000 > 30)
-	{
-		/*/
-		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
-		stripe.setFillColor(Color::Red);
-		stripe.setPosition(100.f, 668.f);
-		stripes.emplace_back(stripe);
-		/**/
-
-		update_position(avgs[0] / 100000, stripe_sub_bass);
-
-
-		
-		if (stripe_sub_bass.getPosition().y < -100)
-		{
-			stripe_sub_bass.setPosition(100.f, 668.f);
-		}
-		
-	}
-	
-	/**/
-	if (avgs[1]/100000 > 15)
-	{
-		/*/
-		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
-		stripe.setFillColor(Color::Green);
-		stripe.setPosition(200.f, 668.f);
-		stripes.emplace_back(stripe);
-		/**/
-
-		update_position(avgs[1] / 100000, stripe_bass);
-
-		if (stripe_bass.getPosition().y < -100)
-		{
-			stripe_bass.setPosition(200.f, 668.f);
-		}
-	}
-	if (avgs[2] / 100000 > 8)
-	{
-		/*/
-		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
-		stripe.setFillColor(Color::Green);
-		stripe.setPosition(200.f, 668.f);
-		stripes.emplace_back(stripe);
-		/**/
-
-		update_position(avgs[2] / 100000, stripe_lower_midrange);
-
-		if (stripe_lower_midrange.getPosition().y < -100)
-		{
-			stripe_lower_midrange.setPosition(300.f, 668.f);
-		}
-	}
-	if (avgs[3] / 10000 > 20)
-	{
-		/*/
-		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
-		stripe.setFillColor(Color::Green);
-		stripe.setPosition(200.f, 668.f);
-		stripes.emplace_back(stripe);
-		/**/
-
-		update_position(avgs[3] / 100000, stripe_midrange);
-
-		if (stripe_midrange.getPosition().y < -100)
-		{
-			stripe_midrange.setPosition(400.f, 668.f);
-		}
-	}
-	if (avgs[4] / 10000 > 5)
-	{
-		/*/
-		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
-		stripe.setFillColor(Color::Green);
-		stripe.setPosition(200.f, 668.f);
-		stripes.emplace_back(stripe);
-		/**/
-
-		update_position(avgs[4] / 100000, stripe_upper_midrange);
-
-		if (stripe_upper_midrange.getPosition().y < -100)
-		{
-			stripe_upper_midrange.setPosition(500.f, 668.f);
-		}
-	}
-	if (avgs[5] / 10000 > 5)
-	{
-		/*/
-		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
-		stripe.setFillColor(Color::Green);
-		stripe.setPosition(200.f, 668.f);
-		stripes.emplace_back(stripe);
-		/**/
-
-		update_position(avgs[5] / 100000, stripe_presence);
-
-		if (stripe_presence.getPosition().y < -100)
-		{
-			stripe_presence.setPosition(600.f, 668.f);
-		}
-	}
-	if (avgs[6] / 10000 > 5)
-	{
-		/*/
-		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
-		stripe.setFillColor(Color::Green);
-		stripe.setPosition(200.f, 668.f);
-		stripes.emplace_back(stripe);
-		/**/
-
-		update_position(avgs[6] / 100000, stripe_brillance);
-
-		if (stripe_brillance.getPosition().y < -100)
-		{
-			stripe_brillance.setPosition(700.f, 668.f);
-		}
-	}
-	/*/
-	if (avg_low_midrange/lim > hold)
-	{
-		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
-		stripe.setFillColor(Color::Blue);
-		stripe.setPosition(300.f, 668.f);
-		stripes.emplace_back(stripe);
-	}
-
-	if (avg_midrange > lim)
-	{
-		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
-		stripe.setFillColor(Color::Red);
-		stripe.setPosition(400.f, 668.f);
-		stripes.emplace_back(stripe);
-	}
-
-	if (avg_upper_midrange > lim)
-	{
-		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
-		stripe.setFillColor(Color::Green);
-		stripe.setPosition(500.f, 668.f);
-		stripes.emplace_back(stripe);
-	}
-
-	if (avg_presence > lim)
-	{
-		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
-		stripe.setFillColor(Color::Blue);
-		stripe.setPosition(600.f, 668.f);
-		stripes.emplace_back(stripe);
-	}
-
-	if (avg_brillance > lim)
-	{
-		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
-		stripe.setFillColor(Color::Red);
-		stripe.setPosition(700.f, 668.f);
-		stripes.emplace_back(stripe);
-	}
-	/**/
-}
-
-
-void Stripes::update_position(const int& speed, RectangleShape& stripe)
-{
-	stripe.move(0.f, -speed);
-}
-
-
-void Stripes::update_ranges()
-{
-	//get sub_bass 
-	update_freq_range(0, 60, values[0],avgs[0]);
-	//get bass
-	update_freq_range(61, 250, values[1], avgs[1]);
-	//get low_midrange
-	update_freq_range(251, 500, values[2], avgs[2]);
-	//get midrange
-	update_freq_range(501, 2000, values[3], avgs[3]);
-	//get upper_midrange
-	update_freq_range(2001, 4000, values[4], avgs[4]);
-	//get presence
-	update_freq_range(4001, 6000, values[5], avgs[5]);
-	//get brilliance
-	update_freq_range(6001, bin.size(), values[6], avgs[6]);
-	
-}
-
-void Stripes::update_freq_range(const int& low, const int& high, int& new_sum, int&avg)
-{
-	new_sum = 0;
-	for(int i = low; i<=high; i++)
-	{
-		new_sum += abs(bin[i]);
-	}
-	avg = (new_sum)/ (high - low);
-}
-
-
-#pragma endregion
-
 #pragma region Space
 Space::Space(const std::string& song_name) : WithFFT(song_name)
 {
@@ -567,10 +318,17 @@ Space::Space(const std::string& song_name) : WithFFT(song_name)
 
 
 
-	
-	VA.resize(num_of_stars);
+	VA.setPrimitiveType(Lines);
+	VA.resize(2*num_of_stars);
 }
 
+void Space::draw(sf::RenderWindow& window)
+{
+	window.draw(VA);
+	window.draw(planet_background);
+	window.draw(planet);
+	//window.draw(ampl);
+}
 float Space::update_by_sound(const int& from, const int& to, const int& scale_factor)
 {
 	float sum = 0;
@@ -597,13 +355,13 @@ void Space::update()
 	speed = 1.01 + update_by_sound(0, 60,100000000);
 	
 	//float circ_update = 1.f + update_by_sound(60, 250, 10000000);
-	float circ_update = 1.f + update_by_sound(0, 60, 30000000);
+	float circ_update = 1.f + update_by_sound(90, 280, 10000000);
 
 	update_circle(circ_update, planet_background);
 	update_circle(circ_update, planet);
 
 	//rotation is based on human speech frequencies
-	planet.rotate(0.5 + update_by_sound(90, 260,1000000 ));
+	planet.rotate(0.5 + update_by_sound(500, 3000,1000000 ));
 	
 	VA.clear();
 	ampl.clear();
@@ -612,6 +370,9 @@ void Space::update()
 	{
 		star.z += 1;
 
+
+		star.old_x = star.x;
+		star.old_y = star.y;
 		star.x = (star.x - WIDTH / 2) * speed + WIDTH / 2;		
 		star.y = (star.y - HEIGHT / 2) * speed + HEIGHT / 2;		
 
@@ -621,26 +382,25 @@ void Space::update()
 			star.x = 1.f * (rand() % WIDTH);
 			star.y = 1.f * (rand() % HEIGHT);
 			star.z = 100.f;
+
+			star.old_x = star.x;
+			star.old_y = star.y;
 		}
 
-		
+		//adding head of the star
 		VA.append(Vertex(Vector2f(star.x, star.y),Color(star.z,star.z,star.z,255)));
+		//adding tail of the star
+		VA.append(Vertex(Vector2f(star.old_x, star.old_y), Color(star.z, star.z, star.z, 255)));
 	}
 
 	//+1 is for drawing optimalization
 	const auto position = Vector2f(WIDTH/2.f - planet.getRadius()+1, HEIGHT/2.f);
 	
-	frequency_spectrum_lr(ampl,position ,2.f*planet.getRadius() , 100);
+	frequency_spectrum_lr(ampl,position ,int(2.f * planet.getRadius()) , 100);
 	
 }
 
-void Space::draw(sf::RenderWindow& window)
-{	
-	window.draw(VA);
-	window.draw(planet_background);
-	window.draw(planet);
-	//window.draw(ampl);
-}
+
 
 
 #pragma endregion 

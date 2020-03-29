@@ -138,6 +138,18 @@ Menu::Menu()
 	}
 	#pragma endregion
 
+	#pragma region BACK BUTTON
+	back_button = std::make_unique<BackButton>(30);
+	
+	back_button->set_position(30.f, 30.f + 30.f);
+	back_button->rotate_90_deg();
+	back_button->rotate_90_deg();
+	back_button->rotate_90_deg();
+	back_button->set_text_string("back");
+	Color grey = Color(146, 146, 146);
+	back_button->set_button_color(grey);
+#pragma endregion 
+	
 	song_buffer.loadFromFile(song_name);
 	song.setBuffer(song_buffer);
 	song.setLoop(true);
@@ -191,3 +203,10 @@ void Menu::quit()
 {
 	song.stop();
 }
+
+void Menu::restart()
+{
+	song.play();
+	active = true;
+}
+

@@ -180,6 +180,13 @@ public:
 	UnclickableButton(float x, float y) : RoundButton(x, y) {};
 	void activate(Menu& menu) override;
 };
+
+class BackButton final :public TriangleButton
+{
+public:
+	BackButton(float x) : TriangleButton(x) {};
+	void activate(Menu& menu) override {};
+};
 #pragma endregion 
 
 #pragma region MENU
@@ -192,7 +199,7 @@ public:
 	//Buttons
 	std::vector<std::unique_ptr<AbstractButton>> buttons;
 	std::vector<std::unique_ptr<SongButton>> song_buttons;
-	
+	std::unique_ptr<BackButton> back_button;
 	//Button functions
 	bool active = true;	//TODO: set to false before deploying
 	void change_page(int i);
@@ -202,6 +209,7 @@ public:
 	std::string& get_mode();
 	void add_song(const std::string& song);
 	void quit();
+	void restart();
 
 private:
 	SongDatabase database;

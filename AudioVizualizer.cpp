@@ -1,6 +1,7 @@
 #include "Vizualizer.h"
 #include <iostream>
 
+
 int main ()
 {
 	Vizualizer vizualizer;

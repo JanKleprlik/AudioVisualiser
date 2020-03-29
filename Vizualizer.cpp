@@ -1,12 +1,9 @@
 #include "Vizualizer.h"
 #include <iostream>
-#include <fstream>
 
 using namespace std;
 using namespace sf;
 
-#define WIDTH 1024
-#define HEIGHT 768
 
 void Vizualizer::run()
 {
@@ -48,6 +45,18 @@ void Vizualizer::run()
 					//cout << "Button Released At " << Mouse::getPosition(window).x << " : " << Mouse::getPosition(window).y << endl;
 				}
 			}
+			else
+			{
+				if (event.type == Event::MouseButtonReleased && menu.back_button->is_focused(Mouse::getPosition(window)))
+				{
+					cout << "back" << endl;
+					is_menu_active = true;
+					menu.restart();
+					mode = nullptr;
+
+
+				}
+			}
 			#pragma endregion 
 		}
 		
@@ -60,20 +69,19 @@ void Vizualizer::run()
 			{
 
 				initialize_mode(menu.get_mode(), menu.get_song());
-				//processor.initialize(menu.get_song());
 				menu.quit();
 			}
 		}
 		else
-		{
+		{	
 			//cout << menu.active << " : " << menu.get_mode() << " : " << menu.get_song() << endl;
 			//draw vizualization
 			//processor.update();
 			mode->update();
 			window.clear();
 			mode->draw(window);
-			//processor.draw(window);
-			
+			//draw back button
+			menu.back_button->draw(window);			
 		}
 
 
@@ -106,6 +114,26 @@ Vizualizer::Vizualizer()
 
 void Vizualizer::initialize_mode(const std::string& mode_name, const std::string& song_name)
 {
-	
-	mode = std::make_unique<Stripes>(song_name); //TODO: Change to 'mode_name' before deployement -switch is the way I think
+
+	if (mode_name == "Amplitude")
+	{
+		mode = std::make_unique<Amplitude>(song_name);
+	}
+	else if (mode_name == "Radio")
+	{
+		mode = std::make_unique<Radio>(song_name);
+	}
+	else if (mode_name == "Map")
+	{
+		mode = std::make_unique<Map>(song_name);
+
+	}
+	else if (mode_name == "Space")
+	{
+		mode = std::make_unique<Space>(song_name);
+	}
+	else
+	{
+		throw std::invalid_argument("Received name of mode that has no initialization implemented.");
+	}
 }
