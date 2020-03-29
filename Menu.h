@@ -136,7 +136,9 @@ class PlayButton final : public TextButton
 {
 public :
 	PlayButton(std::string text_, int size) : TextButton(text_, size) {};
-	void activate(Menu& menu) override;	
+	void activate(Menu& menu) override;
+private:
+	sf::Color active_grey = sf::Color(50, 50, 50);
 };
 
 class IncrementButton final : public TriangleButton
@@ -158,6 +160,11 @@ class ModeButton final : public RoundButton
 public:
 	ModeButton(float x, float y) : RoundButton(x, y) {};
 	void activate(Menu& menu) override;
+private:
+	sf::Color active_grey = sf::Color(50, 50, 50);
+	sf::Color light_grey = sf::Color(209, 209, 209);
+	sf::Color black = sf::Color::Black;
+	sf::Color white = sf::Color::White;
 };
 
 class SongButton final : public RoundButton
@@ -165,6 +172,11 @@ class SongButton final : public RoundButton
 public:
 	SongButton(float x, float y) : RoundButton(x, y) {};
 	void activate(Menu& menu) override;
+private:
+	sf::Color active_grey = sf::Color(50, 50, 50);
+	sf::Color light_grey = sf::Color(209, 209, 209);
+	sf::Color black = sf::Color::Black;
+	sf::Color white = sf::Color::White;
 };
 
 class AddSongButton final : public PlusButton
@@ -199,12 +211,20 @@ public:
 	//Buttons
 	std::vector<std::unique_ptr<AbstractButton>> buttons;
 	std::vector<std::unique_ptr<SongButton>> song_buttons;
+	std::vector<std::unique_ptr<ModeButton>> mode_buttons;
 	std::unique_ptr<BackButton> back_button;
+	//std::unique_ptr<SongButton> active_song_button;
+	//std::unique_ptr<ModeButton> active_mode_button;
+	ModeButton* active_mode_button = nullptr;
+	SongButton* active_song_button = nullptr;
 	//Button functions
 	bool active = true;	//TODO: set to false before deploying
+	int song_page = 0;
 	void change_page(int i);
-	void set_mode(const std::string& mode);
-	void set_song(const std::string& song);
+
+
+	void set_mode();
+	void set_song();
 	std::string& get_song();
 	std::string& get_mode();
 	void add_song(const std::string& song);
@@ -222,9 +242,9 @@ private:
 	const std::string song_name = "Resources/Songs/menu.wav";
 
 	//button command variables
-	std::string chosen_song = "Alfons.wav";		//TODO: set to menu.wav before deploying
-	std::string chosen_mode = "Amplitude";			//TODO: set chosen_mode to Radio before deploying
-	int song_page = 0;
+	std::string chosen_song;		//TODO: set to menu.wav before deploying
+	std::string chosen_mode;			//TODO: set chosen_mode to Radio before deploying
+
 	
 	// Helper variables & constants
 	sf::Font font;

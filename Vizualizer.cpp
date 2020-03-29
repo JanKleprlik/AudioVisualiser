@@ -34,14 +34,25 @@ void Vizualizer::run()
 							button->activate(menu);
 						}
 					}
-					for(auto&& button : menu.song_buttons)
+					
+					for(auto&& button : menu.mode_buttons)
 					{
 						if (button->is_focused(mouse_vec))
 						{
 							cout << button->get_text() << endl;
 							button->activate(menu);
 						}
-					}					
+					}
+
+					for (int i = 0; i < min(6, int(menu.song_buttons.size()) - menu.song_page * 6); i++)
+					{
+						if (menu.song_buttons[i+menu.song_page * 6]->is_focused(mouse_vec))
+						{
+							cout << menu.song_buttons[i + menu.song_page * 6]->get_text() << endl;
+							menu.song_buttons[i + menu.song_page * 6]->activate(menu);
+						}
+					}
+					
 					//cout << "Button Released At " << Mouse::getPosition(window).x << " : " << Mouse::getPosition(window).y << endl;
 				}
 			}

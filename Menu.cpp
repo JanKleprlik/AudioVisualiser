@@ -1,6 +1,7 @@
 #include "Menu.h"
 #include <iostream>
 #include <fstream>
+#include "Vizualizer.h"
 
 using namespace std;
 using namespace sf;
@@ -10,15 +11,22 @@ using namespace sf;
  */
 void Menu::draw(RenderWindow& window)
 {
-	update_buttons();
+	//update_buttons();
 	for (auto&& button : buttons)
 	{
 		button->draw(window);
 	}
-	for (auto&& song_button : song_buttons)
+
+	for (auto&& mode_button : mode_buttons)
 	{
-		song_button->draw(window);
+		mode_button->draw(window);
 	}
+
+	for(int i = 0; i < min(6, int(song_buttons.size())-song_page*6); i++)
+	{
+		song_buttons[i+song_page * 6]->draw(window);
+	}
+	
 }
 
 Menu::Menu()
@@ -47,8 +55,8 @@ Menu::Menu()
 	//setting sprites for drawing
 	#pragma region SONGS COLLUMN
 	{
-		constexpr float x = 285.f;
-		constexpr float y = 130.f;
+		constexpr float x = WIDTH * 0.35;
+		constexpr float y = HEIGHT * 0.25;
 		UnclickableButton songs_header(310.f, 100.f);
 		songs_header.set_button_color(grey);
 		songs_header.set_font(font);
@@ -57,6 +65,20 @@ Menu::Menu()
 		songs_header.set_position(x, y);
 		buttons.push_back(make_unique<UnclickableButton>(songs_header));
 
+
+		for(int i = 0; i< database.get_size();i++)
+		{
+			SongButton song_name(290.f, 50.f);
+			song_name.set_button_color(light_grey);
+			song_name.set_text_color(black);
+			song_name.set_font(font);
+			song_name.set_text_size(24);
+			song_name.set_text_string(database.get_song_at(i + song_page * 6));
+			song_name.set_position(x, y + 70 * (i % 6 + 1) + 25);
+			song_buttons.push_back(make_unique<SongButton>(song_name));
+		}
+
+		/*/
 		for (int i = 0; i < 6; i++)
 		{
 			SongButton song_name(290.f, 50.f);
@@ -68,14 +90,17 @@ Menu::Menu()
 			song_name.set_position(x, y + 70 * (i + 1) + 25);
 			song_buttons.push_back(make_unique<SongButton>(song_name));
 		}
+		/**/
+		active_song_button = song_buttons[0].get();
+		active_song_button->activate(*this);
 	}
 	#pragma endregion
 
 	#pragma region MODES COLLUMN
 	{
 		//MODES COLLUMN
-		constexpr float x = 739.f;
-		constexpr float y = 130.f;
+		constexpr float x = WIDTH * 0.65;
+		constexpr float y = HEIGHT * 0.25;
 		UnclickableButton modes_header(310.f, 100.f);
 		modes_header.set_button_color(grey);
 		modes_header.set_font(font);
@@ -93,15 +118,18 @@ Menu::Menu()
 			mode_name.set_text_size(24);
 			mode_name.set_text_string(modes.at(i + song_page * 6));
 			mode_name.set_position(x, y + 70 * (i + 1) + 25);
-			buttons.push_back(make_unique<ModeButton>(mode_name));
+			mode_buttons.push_back(make_unique<ModeButton>(mode_name));
 		}
+
+		active_mode_button = mode_buttons[0].get();
+		active_mode_button->activate(*this);
 	}
 	#pragma endregion
 
 	#pragma region CONTROLS
 	{
-		constexpr float x = 165.f;
-		constexpr float y = 655.f;
+		constexpr float x = WIDTH * 0.35 - 117;
+		constexpr float y = HEIGHT * 0.25 + 8 * 65;
 
 		constexpr int size = 60;
 
@@ -126,13 +154,13 @@ Menu::Menu()
 		AddSongButton plus(size, 10);
 		plus.set_button_color(grey);
 		plus.set_text_string("add song");
-		plus.set_position(285.f, y);
+		plus.set_position(x + 125, y);
 		buttons.push_back(make_unique<AddSongButton>(plus));
 
 		PlayButton Play("Play", 90);
 		Play.set_font(font);
 		Play.set_text_color(white);
-		Play.set_position(780.f, y-30);
+		Play.set_position(WIDTH * 0.8, HEIGHT* 0.8);
 		buttons.push_back(make_unique<PlayButton>(Play));
 		
 	}
@@ -162,7 +190,7 @@ void Menu::add_song(const std::string& song)
 }
 void Menu::change_page(int i)
 {
-	if (song_page + i < 0 || song_page + i > (database.get_size()%6)+1)
+	if (song_page + i < 0 || song_page + i >= (database.get_size()/6)+1)
 	{
 		return;
 	}
@@ -171,13 +199,13 @@ void Menu::change_page(int i)
 		song_page += i;
 	}
 }
-void Menu::set_mode(const std::string& mode)
+void Menu::set_mode()
 {
-	chosen_mode = mode;
+	chosen_mode = active_mode_button->get_text();
 }
-void Menu::set_song(const std::string& song)
+void Menu::set_song()
 {
-	chosen_song = song;
+	chosen_song = active_song_button->get_text();
 }
 
 void Menu::update_buttons()

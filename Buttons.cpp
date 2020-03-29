@@ -218,7 +218,18 @@ void IncrementButton::activate(Menu& menu)
 #pragma region Mode Button
 void ModeButton::activate(Menu& menu)
 {
-	menu.set_mode(text.getString());
+	if (menu.active_mode_button != nullptr)
+	{
+		//deactivating old button
+		menu.active_mode_button->set_button_color(this->light_grey);
+		menu.active_mode_button->set_text_color(black);
+	}
+	
+	menu.active_mode_button = this;
+	this->set_button_color(this->active_grey);
+	this->set_text_color(white);
+
+	menu.set_mode();
 }
 
 #pragma endregion
@@ -226,7 +237,18 @@ void ModeButton::activate(Menu& menu)
 #pragma region Song Button
 void SongButton::activate(Menu& menu)
 {
-	menu.set_song(text.getString());
+	if (menu.active_song_button != nullptr)
+	{
+		//deactivating old button
+		menu.active_song_button->set_button_color(this->light_grey);
+		menu.active_song_button->set_text_color(black);
+	}
+	
+	menu.active_song_button = this;
+	this->set_button_color(this->active_grey);
+	this->set_text_color(white);
+
+	menu.set_song();
 }
 
 #pragma endregion 
