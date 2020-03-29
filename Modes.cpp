@@ -190,11 +190,11 @@ void WithFFT::generate_bars_lr_up(sf::VertexArray& VA, const sf::Vector2f& start
 	}
 }
 
-void WithFFT::frequency_spectrum_lr(sf::VertexArray& VA, const sf::Vector2f& starting_position)
+void WithFFT::frequency_spectrum_lr(sf::VertexArray& VA, const sf::Vector2f& starting_position, const int& length, const int& height)
 {
-	for (int i = 3; i < buffer_size / 2; i++)
+	for (int i = 0; i < length; i++)
 	{
-		VA.append(Vertex(starting_position + Vector2f(i / 8, -abs(bin[(int)i]) / 100000000 * 500), Color::White));
+		VA.append(Vertex(starting_position + Vector2f(i, -abs(bin[(int)i]) / 100000000 * height), Color::White));
 	}
 }
 
@@ -300,13 +300,14 @@ Stripes::Stripes(const std::string& song_name) : WithFFT(song_name)
 
 void Stripes::draw(sf::RenderWindow& window)
 {
-	/**/
-	for (auto&& stripe : stripes)
-	{
-		auto a = stripe.getPosition();
-		window.draw(stripe);
-	}
-	/**/
+	window.draw(stripe_sub_bass);
+	window.draw(stripe_bass);
+	window.draw(stripe_lower_midrange);
+	window.draw(stripe_midrange);
+	window.draw(stripe_upper_midrange);
+	window.draw(stripe_presence);
+	window.draw(stripe_brillance);
+
 	window.draw(VA);
 }
 
@@ -318,14 +319,15 @@ void Stripes::update()
 
 	create_stripes();
 	
-	update_positions();
+	//update_positions();
+
 
 
 
 	VA.clear();
 
 	const Vector2f starting_position(0.f, 384.f);
-	frequency_spectrum_lr(VA, starting_position);
+	//frequency_spectrum_lr(VA, starting_position);
 }
 
 
@@ -333,36 +335,127 @@ void Stripes::update()
 
 void Stripes::create_stripes()
 {
-
-	Vertex a = Vertex(Vector2f(20.f, 20.f));
-	a.position += Vector2f(0.f, 5.f);
-
 	const int lim = 100000;
 	const int hold = 15;
-	if (avg_sub_bass/100000 > 15)
+
+	if (avgs[0]/100000 > 30)
 	{
+		/*/
 		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
 		stripe.setFillColor(Color::Red);
 		stripe.setPosition(100.f, 668.f);
 		stripes.emplace_back(stripe);
+		/**/
+
+		update_position(avgs[0] / 100000, stripe_sub_bass);
 
 
-		Vertex left = Vertex(Vector2f(100.f, 668.f), Color::Red);
-		Vertex right = Vertex(Vector2f(120.f, 668.f), Color::Red);
-
-		VA_bass.append(left);
-		VA_bass.append(right);		
+		
+		if (stripe_sub_bass.getPosition().y < -100)
+		{
+			stripe_sub_bass.setPosition(100.f, 668.f);
+		}
+		
 	}
 	
-	/*/
-	if (avg_bass/lim > hold)
+	/**/
+	if (avgs[1]/100000 > 15)
 	{
+		/*/
 		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
 		stripe.setFillColor(Color::Green);
 		stripe.setPosition(200.f, 668.f);
 		stripes.emplace_back(stripe);
-	}
+		/**/
 
+		update_position(avgs[1] / 100000, stripe_bass);
+
+		if (stripe_bass.getPosition().y < -100)
+		{
+			stripe_bass.setPosition(200.f, 668.f);
+		}
+	}
+	if (avgs[2] / 100000 > 8)
+	{
+		/*/
+		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
+		stripe.setFillColor(Color::Green);
+		stripe.setPosition(200.f, 668.f);
+		stripes.emplace_back(stripe);
+		/**/
+
+		update_position(avgs[2] / 100000, stripe_lower_midrange);
+
+		if (stripe_lower_midrange.getPosition().y < -100)
+		{
+			stripe_lower_midrange.setPosition(300.f, 668.f);
+		}
+	}
+	if (avgs[3] / 10000 > 20)
+	{
+		/*/
+		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
+		stripe.setFillColor(Color::Green);
+		stripe.setPosition(200.f, 668.f);
+		stripes.emplace_back(stripe);
+		/**/
+
+		update_position(avgs[3] / 100000, stripe_midrange);
+
+		if (stripe_midrange.getPosition().y < -100)
+		{
+			stripe_midrange.setPosition(400.f, 668.f);
+		}
+	}
+	if (avgs[4] / 10000 > 5)
+	{
+		/*/
+		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
+		stripe.setFillColor(Color::Green);
+		stripe.setPosition(200.f, 668.f);
+		stripes.emplace_back(stripe);
+		/**/
+
+		update_position(avgs[4] / 100000, stripe_upper_midrange);
+
+		if (stripe_upper_midrange.getPosition().y < -100)
+		{
+			stripe_upper_midrange.setPosition(500.f, 668.f);
+		}
+	}
+	if (avgs[5] / 10000 > 5)
+	{
+		/*/
+		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
+		stripe.setFillColor(Color::Green);
+		stripe.setPosition(200.f, 668.f);
+		stripes.emplace_back(stripe);
+		/**/
+
+		update_position(avgs[5] / 100000, stripe_presence);
+
+		if (stripe_presence.getPosition().y < -100)
+		{
+			stripe_presence.setPosition(600.f, 668.f);
+		}
+	}
+	if (avgs[6] / 10000 > 5)
+	{
+		/*/
+		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
+		stripe.setFillColor(Color::Green);
+		stripe.setPosition(200.f, 668.f);
+		stripes.emplace_back(stripe);
+		/**/
+
+		update_position(avgs[6] / 100000, stripe_brillance);
+
+		if (stripe_brillance.getPosition().y < -100)
+		{
+			stripe_brillance.setPosition(700.f, 668.f);
+		}
+	}
+	/*/
 	if (avg_low_midrange/lim > hold)
 	{
 		auto stripe = RectangleShape(sf::Vector2f(20.f, 5.f));
@@ -406,52 +499,148 @@ void Stripes::create_stripes()
 }
 
 
-void Stripes::update_positions()
+void Stripes::update_position(const int& speed, RectangleShape& stripe)
 {
-	for (auto&& it = stripes.begin();it < stripes.end(); ++it )
-	{
-		if (it->getPosition().y < 0)
-		{
-			stripes.erase(it);
-		}
-		else
-		{
-			it->move(0.f, -5.f);
-		}
-	}	
+	stripe.move(0.f, -speed);
 }
 
 
 void Stripes::update_ranges()
 {
 	//get sub_bass 
-	update_freq_range(20, 60, sub_bass, old_sub_bass,avg_sub_bass);
+	update_freq_range(0, 60, values[0],avgs[0]);
 	//get bass
-	update_freq_range(61, 250, bass, old_bass,avg_bass);
+	update_freq_range(61, 250, values[1], avgs[1]);
 	//get low_midrange
-	update_freq_range(251, 500, low_midrange, old_low_midrange,avg_low_midrange);
+	update_freq_range(251, 500, values[2], avgs[2]);
 	//get midrange
-	update_freq_range(501, 2000, midrange, old_midrange,avg_midrange);
+	update_freq_range(501, 2000, values[3], avgs[3]);
 	//get upper_midrange
-	update_freq_range(2001, 4000, upper_midrange, old_upper_midrange,avg_upper_midrange);
+	update_freq_range(2001, 4000, values[4], avgs[4]);
 	//get presence
-	update_freq_range(4001, 6000, presence, old_presence,avg_presence);
+	update_freq_range(4001, 6000, values[5], avgs[5]);
 	//get brilliance
-	update_freq_range(6001, bin.size(), brillance, old_brillance,avg_brillance);
+	update_freq_range(6001, bin.size(), values[6], avgs[6]);
 	
 }
 
-void Stripes::update_freq_range(const int& low, const int& high, int& new_sum, int& old_sum, int&avg)
+void Stripes::update_freq_range(const int& low, const int& high, int& new_sum, int&avg)
 {
 	new_sum = 0;
 	for(int i = low; i<=high; i++)
 	{
 		new_sum += abs(bin[i]);
 	}
-	//new_sum -= old_sum;
-	//old_sum = new_sum;
 	avg = (new_sum)/ (high - low);
 }
 
 
 #pragma endregion
+
+#pragma region Space
+Space::Space(const std::string& song_name) : WithFFT(song_name)
+{
+	stars.resize(num_of_stars);
+	for(int i = 0; i < num_of_stars; i++)
+	{
+		stars[i] = (Star {1.f * (rand() % WIDTH),1.f* (rand() % HEIGHT), 0 });
+	}
+	
+	planet_texture.loadFromFile("Resources/mars.png");
+	planet_texture.setSmooth(true);
+
+
+
+
+	planet.setRadius(circle_radius);
+	planet.setPointCount(40);
+	planet.setFillColor(Color(255, 255, 255, 128));
+	planet.setTexture(&planet_texture);
+	planet.setOrigin(circle_radius, circle_radius);
+	planet.setPosition(Vector2f((WIDTH / 2.f), (HEIGHT / 2.f)));
+
+	planet_background.setRadius(circle_radius);
+	planet_background.setPointCount(40);
+	planet_background.setFillColor(Color::Black);
+	planet_background.setOrigin(circle_radius, circle_radius);
+	planet_background.setPosition(Vector2f((WIDTH / 2.f), (HEIGHT / 2.f)));
+
+
+
+	
+	VA.resize(num_of_stars);
+}
+
+float Space::update_by_sound(const int& from, const int& to, const int& scale_factor)
+{
+	float sum = 0;
+	for (int i = from; i < to; ++i)
+	{
+		sum += abs(bin[i]);
+	}
+	return (sum / (to - from)) / scale_factor;
+}
+
+void Space::update_circle(const float& update_value, sf::CircleShape& circle)
+{
+	circle.setRadius(circle_radius * update_value);
+	circle.setOrigin(circle.getRadius(), circle.getRadius());
+	circle.setPosition(Vector2f((WIDTH / 2.f), (HEIGHT / 2.f)));
+}
+
+
+void Space::update()
+{
+	WithFFT::update();
+
+	//update speed accoring to bass level
+	speed = 1.01 + update_by_sound(0, 60,100000000);
+	
+	//float circ_update = 1.f + update_by_sound(60, 250, 10000000);
+	float circ_update = 1.f + update_by_sound(0, 60, 30000000);
+
+	update_circle(circ_update, planet_background);
+	update_circle(circ_update, planet);
+
+	//rotation is based on human speech frequencies
+	planet.rotate(0.5 + update_by_sound(90, 260,1000000 ));
+	
+	VA.clear();
+	ampl.clear();
+	
+	for(auto& star: stars)
+	{
+		star.z += 1;
+
+		star.x = (star.x - WIDTH / 2) * speed + WIDTH / 2;		
+		star.y = (star.y - HEIGHT / 2) * speed + HEIGHT / 2;		
+
+		//reset star - its out of borders
+		if (star.x < 0 || star.x > WIDTH || star.y < 0 || star.y>HEIGHT)
+		{
+			star.x = 1.f * (rand() % WIDTH);
+			star.y = 1.f * (rand() % HEIGHT);
+			star.z = 100.f;
+		}
+
+		
+		VA.append(Vertex(Vector2f(star.x, star.y),Color(star.z,star.z,star.z,255)));
+	}
+
+	//+1 is for drawing optimalization
+	const auto position = Vector2f(WIDTH/2.f - planet.getRadius()+1, HEIGHT/2.f);
+	
+	frequency_spectrum_lr(ampl,position ,2.f*planet.getRadius() , 100);
+	
+}
+
+void Space::draw(sf::RenderWindow& window)
+{	
+	window.draw(VA);
+	window.draw(planet_background);
+	window.draw(planet);
+	//window.draw(ampl);
+}
+
+
+#pragma endregion 

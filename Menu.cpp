@@ -84,7 +84,7 @@ Menu::Menu()
 		modes_header.set_position(x, y);
 		buttons.push_back(make_unique<UnclickableButton>(modes_header));
 
-		for (int i = 0; i < 6; i++)
+		for (size_t i = 0; i < modes.size(); i++)
 		{
 			ModeButton mode_name(290.f, 50.f);
 			mode_name.set_button_color(light_grey);

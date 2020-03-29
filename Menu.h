@@ -205,7 +205,7 @@ public:
 
 private:
 	SongDatabase database;
-	std::vector<std::string> modes = std::vector<std::string>{ "Amplitude","Radio","Map","Stripes","Chaos","Space" };
+	std::vector<std::string> modes = std::vector<std::string>{ "Amplitude","Radio","Map","Space" };
 	void update_buttons();
 
 	//menu song

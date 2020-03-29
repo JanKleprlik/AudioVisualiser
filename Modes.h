@@ -3,6 +3,10 @@
 #include <SFML/Graphics.hpp>
 #include <complex>
 #include <valarray>
+#include <random>
+
+#define WIDTH 1024
+#define HEIGHT 768
 
 const float PI = 3.14159265358979323846;
 
@@ -57,7 +61,7 @@ protected:
 	void generate_line_lr_up(sf::VertexArray& VA, const sf::Vector2f& starting_position);
 	void generate_line_lr_down(sf::VertexArray& VA, const sf::Vector2f& starting_position);
 
-	void frequency_spectrum_lr(sf::VertexArray& VA, const sf::Vector2f& starting_position);
+	void frequency_spectrum_lr(sf::VertexArray& VA, const sf::Vector2f& starting_position, const int& length, const int& height);
 
 	void generate_map(sf::VertexArray& VA, const sf::Vector2f& starting_position);
 
@@ -101,6 +105,9 @@ private:
 	std::vector<sf::RectangleShape> stripes;
 	sf::VertexArray VA;
 	
+	std::vector<int> values = { 0,0,0,0,0,0,0 };
+	std::vector<int> avgs = { 0,0,0,0,0,0,0 };
+
 	
 	int sub_bass = 0;			//20-60 Hz
 	int bass = 0;				//60-250 Hz
@@ -127,23 +134,60 @@ private:
 	int avg_upper_midrange = 0;		//2000-4000 Hz
 	int avg_presence = 0;			//4000-6000 Hz
 	int avg_brillance = 0;			//6000-20000 Hz
+
+	
 	void update_ranges();
-	void update_positions();
+	//void update_positions();
+	void update_position(const int& speed, sf::RectangleShape& stripe);
 	void create_stripes();
 
 
 	//updates new_sum minus old_sum from frequecny low to high
-	void update_freq_range(const int& low,const int& high,int& new_sum, int& old_sum, int& avg);
+	void update_freq_range(const int& low,const int& high,int& new_sum, int& avg);
 
 	/**/
 	// constants
 
-	const sf::RectangleShape stripe_sub_bass = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
-	const sf::RectangleShape stripe_bass = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
-	const sf::RectangleShape stripe_lower_midrange = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
-	const sf::RectangleShape stripe_midrange = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
-	const sf::RectangleShape stripe_upper_midrange = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
-	const sf::RectangleShape stripe_presence = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
-	const sf::RectangleShape stripe_brillance = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
+	sf::RectangleShape stripe_sub_bass = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
+	sf::RectangleShape stripe_bass = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
+	sf::RectangleShape stripe_lower_midrange = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
+	sf::RectangleShape stripe_midrange = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
+	sf::RectangleShape stripe_upper_midrange = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
+	sf::RectangleShape stripe_presence = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
+	sf::RectangleShape stripe_brillance = sf::RectangleShape(sf::Vector2f(20.f, 100.f));
 	/**/
+};
+
+class Space :public WithFFT
+{
+public:
+	Space(const std::string& song_name);
+	void draw(sf::RenderWindow& window) override;
+	void update() override;
+private:
+	const int num_of_stars  = 500;
+	const int circle_radius = 100;
+
+	float speed = 1.01;
+	float circ_transform = 1.f;
+
+	float update_by_sound(const int& from, const int& to, const int& scale_factor);
+	void update_circle(const float& update_value, sf::CircleShape& circle);
+
+	
+	struct Star
+	{
+		float x = 0.f;
+		float y = 0.f;
+		float z = 0.f;
+	};
+
+	
+	std::vector<Star> stars;
+	sf::VertexArray VA;
+	sf::VertexArray ampl;
+	sf::CircleShape planet;
+	sf::CircleShape planet_background;
+	sf::Texture planet_texture;
+
 };
