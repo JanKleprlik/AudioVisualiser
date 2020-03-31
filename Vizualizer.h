@@ -7,7 +7,7 @@
 
 #define WIDTH 1920
 #define HEIGHT 1080
-#define FPS 60
+#define FPS 55
 
 
 class Vizualizer

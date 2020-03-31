@@ -65,11 +65,10 @@ protected:
 	void generate_line_lr_down(sf::VertexArray& VA, const sf::Vector2f& starting_position);
 
 	void frequency_spectrum_lr(sf::VertexArray& VA, const sf::Vector2f& starting_position, const int& length, const int& height);
+	void frequency_spectrum_round(std::vector<sf::VertexArray>& VAs, std::vector<sf::Color>& colors,const std::vector<float>& heights, const sf::Vector2f& center, const float& radius, const int& from, const int& to);
 
 	void generate_map(sf::VertexArray& VA, const sf::Vector2f& starting_position);
 
-	//void generate_stripe(const int& velocity, const sf::Vector2f& position, const sf::RectangleShape& stripe);
-	//void generate_stripes(const int& sub_bass,const int& bass, const int& low_midrange, const int&  midrange, const int& upper_midrange, const int& presence, const int& brillance);
 	std::vector<sf::Vertex> map;
 	std::vector<Complex> samples;
 	ComplAr bin;
@@ -106,15 +105,14 @@ public:
 	void update() override;
 private:
 	const int num_of_stars  = 300;
-	const int circle_radius = 100;
+	const int base_planet_radius = 150;
 
-	float speed = 1.01;
-	float circ_transform = 1.f;
+	float base_star_speed = 1.01;
+	float base_radius_transform = 1.f;
 
 	float update_by_sound(const int& from, const int& to, const int& scale_factor);
-	void update_circle(const float& update_value, sf::CircleShape& circle);
+	void update_radius(const float& update_value, sf::CircleShape& circle) const;
 
-	
 	struct Star
 	{
 		float x = 0.f;
@@ -127,8 +125,12 @@ private:
 
 	
 	std::vector<Star> stars;
-	sf::VertexArray VA;
-	sf::VertexArray ampl;
+	sf::VertexArray star_vertices;
+
+	std::vector<sf::VertexArray> halo;
+	std::vector<sf::Color> halo_colors;
+	std::vector<float> halo_heights;
+	
 	sf::CircleShape planet;
 	sf::CircleShape planet_background;
 	sf::Texture planet_texture;

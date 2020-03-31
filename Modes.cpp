@@ -44,9 +44,6 @@ AbstractMode::AbstractMode(const std::string& song_name)
 	
 	song.setLoop(true);
 	song.play();
-	
-
-	
 }
 #pragma endregion 
 
@@ -60,11 +57,15 @@ Amplitude::Amplitude(const std::string& song_name) :AbstractMode(song_name)
 void Amplitude::update()
 {
 	int offset = song.getPlayingOffset().asSeconds() * sample_rate;
-	int color_jump = buffer_size / 256;
-	for (int i = 0; i < buffer_size; i++)
+	if (offset + buffer_size < sample_count)
 	{
-		VA[i] = Vertex(Vector2f(0.f, (float)(HEIGHT/2)) + Vector2f(i/(float)buffer_size*WIDTH, buffer.getSamples()[i + offset] * 0.008), Color(255 - i/color_jump, 0, i/color_jump));
+		int color_jump = buffer_size / 256;
+		for (int i = 0; i < buffer_size; i++)
+		{
+			VA[i] = Vertex(Vector2f(0.f, (float)(HEIGHT / 2)) + Vector2f(i / (float)buffer_size * WIDTH, buffer.getSamples()[i + offset] * 0.008), Color(255 - i / color_jump, 0, i / color_jump));
+		}
 	}
+
 }
 
 void Amplitude::draw(RenderWindow& window)
@@ -84,12 +85,13 @@ WithFFT::WithFFT(const std::string& song_name) :AbstractMode(song_name)
 void WithFFT::update()
 {
 	int offset = song.getPlayingOffset().asSeconds() * sample_rate;
-	for (int i = 0; i < buffer_size; i++)
+	if(offset + buffer_size < sample_count)
 	{
-		samples[i] = Complex(buffer.getSamples()[i + offset] * window[i], 0);
+		for (int i = 0; i < buffer_size; i++)
+		{
+			samples[i] = Complex(buffer.getSamples()[i + offset] * window[i], 0);
+		}
 	}
-
-
 
 	bin = ComplAr(samples.data(), buffer_size);
 	fft(bin);
@@ -137,7 +139,6 @@ void WithFFT::generate_line_lr_up(sf::VertexArray& VA, const sf::Vector2f& start
 		x_start++;
 	}
 }
-
 void WithFFT::generate_line_lr_down(sf::VertexArray& VA, const sf::Vector2f& starting_position)
 {
 	int stop_position = log(buffer_size / (2 * 3)) / log(1.01);
@@ -153,7 +154,6 @@ void WithFFT::generate_line_lr_down(sf::VertexArray& VA, const sf::Vector2f& sta
 		x_start++;
 	}
 }
-
 void WithFFT::generate_bars_lr_down(sf::VertexArray& VA, const sf::Vector2f& starting_position)
 {
 	const int stop_position = log(buffer_size / (2 * 3)) / log(1.01);
@@ -186,12 +186,76 @@ void WithFFT::generate_bars_lr_up(sf::VertexArray& VA, const sf::Vector2f& start
 		x_start++;
 	}
 }
-
 void WithFFT::frequency_spectrum_lr(sf::VertexArray& VA, const sf::Vector2f& starting_position, const int& length, const int& height)
 {
 	for (int i = 0; i < length; i++)
 	{
-		VA.append(Vertex(starting_position + Vector2f(i, -abs(bin[(int)i]) / 100000000 * height), Color::White));
+		VA.append(Vertex(starting_position + Vector2f(i, -abs(bin[(int)i]) / 100000000 * height), Color(217, 98, 80,128)));
+	}
+}
+
+//layers of frequencies
+void WithFFT::frequency_spectrum_round(std::vector<sf::VertexArray>& VAs,std::vector<sf::Color>& colors,const std::vector<float>& heights, const sf::Vector2f& center, const float& radius, const int& from, const int& to)
+{
+	if (VAs.size() != colors.size() || VAs.size() != heights.size())
+	{
+		throw new invalid_argument("number of VertexArrays is not the same as number of colors");
+	}
+	if(from == 0)
+	{
+		throw new invalid_argument("spectrum cant start at 0, set different 'from' value");
+	}
+
+
+
+	
+	const float scale = float(to-from) / 180.f;		//divided by angle (in degrees) that the scale should cover (360 - circle; 180 - half a circle)
+	
+	for (int i = 0; i < VAs.size(); i++)
+	{
+		VAs[i].append(Vertex(center, colors[i]));
+	}
+
+
+	/**/
+	for(int j = VAs.size()-1; j >= 0; j--)
+	{
+		//VAs[j].append(Vertex(center + ))
+		//generating left side of the halo
+		float new_radius;
+		float angle;
+		Vector2f cartez;
+		Vector2f base_position;
+		for (float i = from; i<float(to); i *= 1.01)
+		{
+			//generating left-side
+			new_radius = radius * (1 + (abs(bin[int(i)]) / 30000000000 * heights[j]));
+			angle= ((i-from)/ scale + 90 ) * PI / 180;
+			
+			cartez = Vector2f(new_radius * cos(angle), new_radius * sin(angle)); //polar coordinates to cartez
+			base_position = center + cartez;
+			VAs[j].append(Vertex(base_position, colors[j]));
+
+			//generating right-side
+
+		}
+		//last vertex for completing full semicircle
+		angle = (270 * PI / 180);
+		cartez = Vector2f(new_radius * cos(angle), new_radius * sin(angle));
+		VAs[j].append(Vertex(center + cartez));
+		//generating right side of the halo
+		for (float i = from; i<float(to); i *= 1.01)
+		{
+			 new_radius = radius * (1 + (abs(bin[int(i)]) / 30000000000 * heights[j]));
+			angle = (-(i - from) / scale + 90) * PI / 180;
+			cartez = Vector2f(new_radius * cos(angle), new_radius * sin(angle));
+			base_position = center + cartez;
+			VAs[j].append(Vertex(base_position, colors[j]));
+		}
+		//last vertex for completing full semicircle
+		angle = -(90 * PI / 180);
+		cartez = Vector2f(new_radius * cos(angle), new_radius * sin(angle));
+		VAs[j].append(Vertex(center + cartez));
 	}
 }
 
@@ -297,37 +361,57 @@ Space::Space(const std::string& song_name) : WithFFT(song_name)
 		stars[i] = (Star {1.f * (rand() % WIDTH),1.f* (rand() % HEIGHT), 0 });
 	}
 	
+	//initialization of planet
 	planet_texture.loadFromFile("Resources/mars.png");
 	planet_texture.setSmooth(true);
-
-
-
-
-	planet.setRadius(circle_radius);
+	planet.setRadius(base_planet_radius);
 	planet.setPointCount(40);
 	planet.setFillColor(Color(255, 255, 255, 128));
 	planet.setTexture(&planet_texture);
-	planet.setOrigin(circle_radius, circle_radius);
+	planet.setOrigin(base_planet_radius, base_planet_radius);
 	planet.setPosition(Vector2f((WIDTH / 2.f), (HEIGHT / 2.f)));
 
-	planet_background.setRadius(circle_radius);
+	planet_background.setRadius(base_planet_radius);
 	planet_background.setPointCount(40);
 	planet_background.setFillColor(Color::Black);
-	planet_background.setOrigin(circle_radius, circle_radius);
+	planet_background.setOrigin(base_planet_radius, base_planet_radius);
 	planet_background.setPosition(Vector2f((WIDTH / 2.f), (HEIGHT / 2.f)));
 
 
+	//initialization of stars
+	star_vertices.setPrimitiveType(Lines);
+	star_vertices.resize(2*num_of_stars);
 
-	VA.setPrimitiveType(Lines);
-	VA.resize(2*num_of_stars);
+	//inicialization of halo effect
+	for (int i = 0; i <4; i++)
+	{
+		halo.push_back(VertexArray(TriangleFan));
+
+	}
+	const float base_height = 300;
+	halo_heights.emplace_back(base_height * 3);
+	halo_heights.emplace_back(base_height * 2.6);
+	halo_heights.emplace_back(base_height * 2);
+	halo_heights.emplace_back(base_height);
+
+	halo_colors.push_back(Color::Blue);		
+	halo_colors.push_back(Color::Red);
+	halo_colors.push_back(Color::Yellow);
+	halo_colors.push_back(Color::White);
 }
 
 void Space::draw(sf::RenderWindow& window)
 {
-	window.draw(VA);
+	window.draw(star_vertices);
+
+	for (auto&& layer :halo)
+	{
+		window.draw(layer);
+	}
+	
 	window.draw(planet_background);
 	window.draw(planet);
-	//window.draw(ampl);
+
 }
 float Space::update_by_sound(const int& from, const int& to, const int& scale_factor)
 {
@@ -339,9 +423,9 @@ float Space::update_by_sound(const int& from, const int& to, const int& scale_fa
 	return (sum / (to - from)) / scale_factor;
 }
 
-void Space::update_circle(const float& update_value, sf::CircleShape& circle)
+void Space::update_radius(const float& update_value,sf::CircleShape& circle) const
 {
-	circle.setRadius(circle_radius * update_value);
+	circle.setRadius(base_planet_radius * update_value);
 	circle.setOrigin(circle.getRadius(), circle.getRadius());
 	circle.setPosition(Vector2f((WIDTH / 2.f), (HEIGHT / 2.f)));
 }
@@ -351,21 +435,20 @@ void Space::update()
 {
 	WithFFT::update();
 
-	//update speed accoring to bass level
-	speed = 1.01 + update_by_sound(0, 60,100000000);
+	//update base_star_speed accoring to sub_bass frequencies
+	base_star_speed = 1.01 + update_by_sound(0, 60,100000000);
 	
-	//float circ_update = 1.f + update_by_sound(60, 250, 10000000);
-	float circ_update = 1.f + update_by_sound(90, 280, 10000000);
+	//planet radius is mapped to human voice frequencies
+	float radius_update = 1.f + update_by_sound(90, 280, 5000000);
 
-	update_circle(circ_update, planet_background);
-	update_circle(circ_update, planet);
+	update_radius(radius_update, planet_background);
+	update_radius(radius_update, planet);
 
-	//rotation is based on human speech frequencies
+	//rotation is based on higher pitch frequencies - the flow of the sceen feels more natural imo
 	planet.rotate(0.5 + update_by_sound(500, 3000,1000000 ));
-	
-	VA.clear();
-	ampl.clear();
-	
+
+	//stars generation
+	star_vertices.clear();
 	for(auto& star: stars)
 	{
 		star.z += 1;
@@ -373,8 +456,8 @@ void Space::update()
 
 		star.old_x = star.x;
 		star.old_y = star.y;
-		star.x = (star.x - WIDTH / 2) * speed + WIDTH / 2;		
-		star.y = (star.y - HEIGHT / 2) * speed + HEIGHT / 2;		
+		star.x = (star.x - WIDTH / 2) * base_star_speed + WIDTH / 2;		
+		star.y = (star.y - HEIGHT / 2) * base_star_speed + HEIGHT / 2;		
 
 		//reset star - its out of borders
 		if (star.x < 0 || star.x > WIDTH || star.y < 0 || star.y>HEIGHT)
@@ -388,15 +471,23 @@ void Space::update()
 		}
 
 		//adding head of the star
-		VA.append(Vertex(Vector2f(star.x, star.y),Color(star.z,star.z,star.z,255)));
+		star_vertices.append(Vertex(Vector2f(star.x, star.y),Color(star.z,star.z,star.z,255)));
 		//adding tail of the star
-		VA.append(Vertex(Vector2f(star.old_x, star.old_y), Color(star.z, star.z, star.z, 255)));
+		star_vertices.append(Vertex(Vector2f(star.old_x, star.old_y), Color(star.z, star.z, star.z, 255)));
 	}
-
-	//+1 is for drawing optimalization
-	const auto position = Vector2f(WIDTH/2.f - planet.getRadius()+1, HEIGHT/2.f);
+	//generating halo around planet
+	for (size_t i = 0; i < halo.size(); i++)
+	{
+		halo[i].clear();
+	}
 	
-	frequency_spectrum_lr(ampl,position ,int(2.f * planet.getRadius()) , 100);
+	frequency_spectrum_round(halo, halo_colors, halo_heights, Vector2f(WIDTH / 2.f, HEIGHT / 2.f), planet.getRadius() - 2, 20, 80);
+
+	
+	//+1 is for drawing optimalization
+	//	const auto position = Vector2f(WIDTH/2.f - planet.getRadius()+1, HEIGHT/2.f);
+	
+	//	frequency_spectrum_lr(ampl_white,position ,int(2.f * planet.getRadius()) , 100);
 	
 }
 
