@@ -5,7 +5,9 @@ Application visualizing songs in real time.
 
 ## Installation
 
+> Note that you can only compile this application on Windows in Visual Studio 2019 or newer.
 
+Because this application is using library SFML, in order to be able to compile the code, you have to add ***openal32.dll*, *sfml-audio-2.dll*, *sfml-graphics-2.dll*, *sfml-system-2.dll*, *sfml-window-2.dll*** to the Release or Debug folder. You can find those files in `SFML-2.4.1` folder. You do not have to setup includes, header and libraries paths in visual studio. That is already done in configuration file for Visual Studio.
 
 ## Using the application
 ### Main menu
