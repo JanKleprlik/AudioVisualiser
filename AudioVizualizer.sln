@@ -5,6 +5,15 @@ VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AudioVizualizer", "AudioVizualizer.vcxproj", "{5630A561-A03A-472B-9B72-89CC6995D72D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D299CC33-8305-43C1-B7A5-AD141D0C7F69}"
+	ProjectSection(SolutionItems) = preProject
+		Code\Headerss\Menu.h = Code\Headerss\Menu.h
+		Code\Headerss\Modes.h = Code\Headerss\Modes.h
+		Code\Headerss\SongDatabase.h = Code\Headerss\SongDatabase.h
+		Code\Headerss\SoundProcessor.h = Code\Headerss\SoundProcessor.h
+		Code\Headerss\Vizualizer.h = Code\Headerss\Vizualizer.h
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

@@ -6,47 +6,50 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Code">
-      <UniqueIdentifier>{f7b48198-ef5d-4d4a-b03a-0c5789504dfe}</UniqueIdentifier>
+      <UniqueIdentifier>{889ee60c-9263-4386-972a-2115cf179553}</UniqueIdentifier>
     </Filter>
     <Filter Include="Code\Headers">
-      <UniqueIdentifier>{5d9fcb12-c918-423f-91c4-15d1cff0e03b}</UniqueIdentifier>
+      <UniqueIdentifier>{5983c85a-b655-4c90-bbb2-4426bd873d0a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Source">
-      <UniqueIdentifier>{b2722e8f-d737-4f0b-8bc9-cd045d5dd5b7}</UniqueIdentifier>
+    <Filter Include="Code\Source Code">
+      <UniqueIdentifier>{3cee4fd8-890f-46a6-b7ec-8044813fe7d5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AudioVizualizer.cpp">
-      <Filter>Code\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Buttons.cpp">
-      <Filter>Code\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu.cpp">
-      <Filter>Code\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Modes.cpp">
-      <Filter>Code\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="SongDatabase.cpp">
-      <Filter>Code\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Vizualizer.cpp">
-      <Filter>Code\Source</Filter>
-    </ClCompile>
+    <ClInclude Include="Code\Headerss\Menu.h">
+      <Filter>Code\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Headerss\SoundProcessor.h">
+      <Filter>Code\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Headerss\SongDatabase.h">
+      <Filter>Code\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Headerss\Modes.h">
+      <Filter>Code\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Headerss\Vizualizer.h">
+      <Filter>Code\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Vizualizer.h">
-      <Filter>Code\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SongDatabase.h">
-      <Filter>Code\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Modes.h">
-      <Filter>Code\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>Code\Headers</Filter>
-    </ClInclude>
+    <ClCompile Include="Code\Source Code\AudioVizualizer.cpp">
+      <Filter>Code\Source Code</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Source Code\Buttons.cpp">
+      <Filter>Code\Source Code</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Source Code\Menu.cpp">
+      <Filter>Code\Source Code</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Source Code\Modes.cpp">
+      <Filter>Code\Source Code</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Source Code\SongDatabase.cpp">
+      <Filter>Code\Source Code</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Source Code\Vizualizer.cpp">
+      <Filter>Code\Source Code</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

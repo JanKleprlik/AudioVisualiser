@@ -1,7 +1,7 @@
-#include "Menu.h"
 #include <iostream>
 #include <fstream>
-#include "Vizualizer.h"
+#include "../Headerss/Menu.h"
+#include "../Headerss/Vizualizer.h"
 
 using namespace std;
 using namespace sf;

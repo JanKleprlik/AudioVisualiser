@@ -1,7 +1,7 @@
-#include "Modes.h"
-#include "Vizualizer.h"
 #include <fstream>
 #include <iostream>
+#include "../Headerss/Menu.h"
+#include "../Headerss/Vizualizer.h"
 
 #define BUFFER_SIZE 16384
 

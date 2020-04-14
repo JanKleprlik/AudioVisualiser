@@ -1,5 +1,5 @@
-#include "Vizualizer.h"
 #include <iostream>
+#include "../Headerss/Vizualizer.h"
 
 
 int main ()
