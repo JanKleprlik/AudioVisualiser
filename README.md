@@ -24,6 +24,9 @@ If you want to add new song, you have to manually add the song in .wav or .flac 
 >Note name that you write either to the `song_database.txt` file or `Console` must be exactly the same as name of the song you added to the `Resources/Songs` file. 
 
 ## Modes
+
+At each Mode screen there is triangle button at the top left corner that quits the play mode and enters the menu.
+
 ### Amplitude mode
 This mode shows raw frequency waves.
 ![Amplitude mode](/Documentation/amplitude.PNG)
