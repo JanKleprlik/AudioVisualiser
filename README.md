@@ -29,7 +29,7 @@ This mode shows raw frequency waves.
 This mode visualizes the song as bars. Each bar represents specific frequency and its height represents its loudness.
 ![Radio mode](/Documentation/radio.png)
 ### Map mode
-This mode creates a map that moves with time. Map is generated similarelly as radio mode is.
+This mode creates a map that moves with time. Map is generated similarly as radio mode is.
 ![Map mode](/Documentation/map.png)
 ### Space mode
 This is the most complex mode. Stars speed is linked to sub bass frequencies. Planet size is mapped to human voice frequencies. Rotation of the planet is mapped to high pitch frequencies. And lastly halo is radio mode-like representation of bass frequencies.
