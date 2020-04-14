@@ -16,15 +16,22 @@ public:
 	Vizualizer();
 	void run();
 private:
+	/**
+	* Window that is displayed.
+	*/
 	sf::RenderWindow window;
+	/**
+ * Currently chosen song.
+ */
 	std::string active_song;
+	/**
+ * Currently chosen play mode.
+ */
 	std::string active_mode;
 	void initialize_mode(const std::string& mode_name, const std::string& song_name);
 	
 	Menu menu;
 	std::unique_ptr<AbstractMode> mode;
-	
-	
 	bool is_menu_active = true;
 };
 

@@ -4,13 +4,12 @@
 using namespace std;
 using namespace sf;
 
-
+/**
+ * Main function. Handles all user input.
+ */
 void Vizualizer::run()
 {
 	Event event;
-	const Clock clock;
-	Time time;
-	int i = 0;
 	while(window.isOpen())
 	{
 		while(window.pollEvent(event))
@@ -52,8 +51,6 @@ void Vizualizer::run()
 							menu.song_buttons[i + menu.song_page * 6]->activate(menu);
 						}
 					}
-					
-					//cout << "Button Released At " << Mouse::getPosition(window).x << " : " << Mouse::getPosition(window).y << endl;
 				}
 			}
 			else
@@ -75,7 +72,7 @@ void Vizualizer::run()
 		if (is_menu_active)
 		{
 			menu.draw(window);
-			is_menu_active = menu.active;
+			is_menu_active = menu.is_active;
 			if (!is_menu_active)
 			{
 
@@ -85,31 +82,18 @@ void Vizualizer::run()
 		}
 		else
 		{	
-			//cout << menu.active << " : " << menu.get_mode() << " : " << menu.get_song() << endl;
-			//draw vizualization
-			//processor.update();
 			mode->update();
 			window.clear();
 			mode->draw(window);
+			
 			//draw back button
 			menu.back_button->draw(window);			
 		}
-
-
-
 		window.display();
-
-		//FPS
-		/*/
-		time = clock.getElapsedTime();
-		int fps = i / time.asSeconds();
-		cout << fps << endl;
-		i++;
-		/**/
 	}
 }
 
-/*
+/**
  * Vizualizer constructor
  * Sets parameters for window.
  */
@@ -123,6 +107,9 @@ Vizualizer::Vizualizer()
 	window.setFramerateLimit(FPS);
 }
 
+/**
+ * Starts up current mode.
+ */
 void Vizualizer::initialize_mode(const std::string& mode_name, const std::string& song_name)
 {
 

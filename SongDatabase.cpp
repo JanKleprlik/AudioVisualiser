@@ -1,6 +1,6 @@
 #include "SongDatabase.h"
 #include <fstream>
-/*
+/**
  * Adds song 'name' to the database.
  */
 void SongDatabase::add_song(const std::string& name)
@@ -15,8 +15,8 @@ void SongDatabase::add_song(const std::string& name)
 
 	}
 }
-/*
- * Loads songs form 'song_database.txt' if the song exists
+/**
+ * Loads songs form 'song_database.txt' if the song exists.
  */
 void SongDatabase::load_song(const std::string& name)
 {
@@ -27,7 +27,7 @@ void SongDatabase::load_song(const std::string& name)
 }
  
 
-/*
+/**
  * Deletes song 'name' from the database.
  */
 void SongDatabase::del_song(const std::string& name)
@@ -40,16 +40,18 @@ void SongDatabase::del_song(const std::string& name)
 		}
 	}
 }
-/*
- * Helper function
- * Check for the existance of file 'name'
+/**
+ * Helper function. 
+ * Check for the existance of file 'name'.
  */
 bool SongDatabase::file_existence(const std::string& name)
 {
 	std::ifstream fs(path + name);
 	return fs.good();
 }
-
+/**
+* Returns name of the song at index position.
+*/
 std::string SongDatabase::get_song_at(int index)
 {
 	if (index >= database.size())
@@ -62,7 +64,9 @@ std::string SongDatabase::get_song_at(int index)
 	}
 
 }
-
+/**
+* Returns number of songs in the database.
+*/
 int SongDatabase::get_size()
 {
 	return database.size();

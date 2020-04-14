@@ -40,11 +40,11 @@ protected:
 class RoundButton  : public AbstractButton
 {
 public:
-	/*
-	 * x - widht
+	/**
+	 * x - width
 	 * y - height
 	 */
-	RoundButton(float x, float y) : AbstractButton(x, y) //x -> WIDTH, y -> height
+	RoundButton(const float x,const float y) : AbstractButton(x, y)
 	{
 		circ_left = sf::CircleShape(y_dim / 2);
 		circ_right = sf::CircleShape(y_dim / (2));
@@ -63,7 +63,7 @@ private:
 class TriangleButton  : public AbstractButton
 {
 public:
-	/*
+	/**
 	 * x - height of the triangle
 	 */
 	TriangleButton(float x) : AbstractButton(x, x)
@@ -84,7 +84,7 @@ private:
 class PlusButton  : public AbstractButton
 {
 public:
-	/*
+	/**
 	 * x - height of the plus
 	 * y - thickness of the plus
 	 */
@@ -213,12 +213,11 @@ public:
 	std::vector<std::unique_ptr<SongButton>> song_buttons;
 	std::vector<std::unique_ptr<ModeButton>> mode_buttons;
 	std::unique_ptr<BackButton> back_button;
-	//std::unique_ptr<SongButton> active_song_button;
-	//std::unique_ptr<ModeButton> active_mode_button;
 	ModeButton* active_mode_button = nullptr;
 	SongButton* active_song_button = nullptr;
+	
 	//Button functions
-	bool active = true;	//TODO: set to false before deploying
+	bool is_active = true;
 	int song_page = 0;
 	void change_page(int i);
 
@@ -242,8 +241,8 @@ private:
 	const std::string song_name = "Resources/Songs/menu.wav";
 
 	//button command variables
-	std::string chosen_song;		//TODO: set to menu.wav before deploying
-	std::string chosen_mode;			//TODO: set chosen_mode to Radio before deploying
+	std::string chosen_song;
+	std::string chosen_mode;
 
 	
 	// Helper variables & constants

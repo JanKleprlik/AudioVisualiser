@@ -11,7 +11,11 @@ using namespace std;
 using namespace sf;
 
 #pragma region Abstract Mode
-
+/**
+* Initializes song to be played on loop.
+* All Modes must be derived from this class.
+* Input: song name string
+*/
 AbstractMode::AbstractMode(const std::string& song_name)
 {
 	ifstream ifs(path + song_name);
@@ -48,26 +52,35 @@ AbstractMode::AbstractMode(const std::string& song_name)
 #pragma endregion 
 
 #pragma region Amplitude
+/**
+ * Initializes drawables.
+ */
 Amplitude::Amplitude(const std::string& song_name) :AbstractMode(song_name)
 {
 	VA.resize(buffer_size);
 	VA.setPrimitiveType(LineStrip);
 }
-
+/**
+ *  Updates heights of all vertices by current song buffer values.
+ */
 void Amplitude::update()
 {
-	int offset = song.getPlayingOffset().asSeconds() * sample_rate;
+	const int offset = static_cast<int>(song.getPlayingOffset().asSeconds() * sample_rate);
 	if (offset + buffer_size < sample_count)
 	{
-		int color_jump = buffer_size / 256;
+		const int color_jump = static_cast<int>(buffer_size / 256);
 		for (int i = 0; i < buffer_size; i++)
 		{
-			VA[i] = Vertex(Vector2f(0.f, (float)(HEIGHT / 2)) + Vector2f(i / (float)buffer_size * WIDTH, buffer.getSamples()[i + offset] * 0.008), Color(255 - i / color_jump, 0, i / color_jump));
+			VA[i] = Vertex(Vector2f(0.f,	//x
+				static_cast<float>(HEIGHT / 2)) + Vector2f(i / static_cast<float>(buffer_size) * WIDTH, buffer.getSamples()[i + offset] * static_cast<float>(0.008)),	//y
+				Color(255 - i / color_jump, 0, i / color_jump));
 		}
 	}
 
 }
-
+/**
+ * Draws amplitude to the given window.
+ */
 void Amplitude::draw(RenderWindow& window)
 {
 	window.draw(VA);
@@ -75,31 +88,38 @@ void Amplitude::draw(RenderWindow& window)
 #pragma endregion 
 
 #pragma region WithFFT
+/**
+ * Initializes drawables.
+ */
 WithFFT::WithFFT(const std::string& song_name) :AbstractMode(song_name)
 {
 	samples.resize(buffer_size);
 
 	create_hamming_window();
 }
-
+/**
+ * Computes FFT on current song buffer values.
+ */
 void WithFFT::update()
 {
-	int offset = song.getPlayingOffset().asSeconds() * sample_rate;
+	int offset = static_cast<int>(song.getPlayingOffset().asSeconds() * sample_rate);
 	if(offset + buffer_size < sample_count)
 	{
 		for (int i = 0; i < buffer_size; i++)
 		{
-			samples[i] = Complex(buffer.getSamples()[i + offset] * window[i], 0);
+			samples[i] = Complex(static_cast<int>(buffer.getSamples()[i + offset] * window[i]), 0);
 		}
 	}
 
 	bin = ComplAr(samples.data(), buffer_size);
 	fft(bin);
 }
-
+/**
+ *  Implements Fast Fourier Transform algorithm.
+ */
 void WithFFT::fft(ComplAr& data)
 {
-	const int n = data.size();
+	const size_t n = data.size();
 	if (n <= 1) return;
 
 	ComplAr odd = data[slice(1, n / 2, 2)];
@@ -116,53 +136,69 @@ void WithFFT::fft(ComplAr& data)
 		data[i+n/2] = even[i] - omega * odd[i];
 	}
 }
-
+/**
+ * Generates hamming window.
+ */
 void WithFFT::create_hamming_window()
 {
 	for (int i = 0; i < buffer_size; i++) {
-		window.push_back(0.54 - 0.46 * cos((2 * PI * i) / (float)buffer_size));
+		window.push_back(static_cast<float>(0.54) - static_cast<float>(0.46) * cos((2 * PI * i) / static_cast<float>(buffer_size)));
 	}
 }
-
+/**
+ * Generates LINE-like structure pointing up, with bass on the left and heights on the right side. 
+ * Heights are stored into VertexArray VA.
+ * Starting position of the structure is set by argument Vector2f starting_position.
+ */
 void WithFFT::generate_line_lr_up(sf::VertexArray& VA, const sf::Vector2f& starting_position)
 {
-	int stop_position = log(buffer_size / (2 * 3)) / log(1.01);
+	int stop_position = static_cast<int>(log(buffer_size / (2 * 3)) / log(1.01));
 	//buffer_size is divided by 2 for working only on first half of spectrum (second is the same)
 	//, and by three to avoid first few noisi frequencies
 	int x_start = (WIDTH - stop_position) / 2;
-	for (float i = 3.f; i < buffer_size/ 2.f; i *= 1.01)
+	for (float i = 3.f; i < buffer_size/ 2.f; i *= static_cast<float>(1.01))
 	{
-		const Vector2f position(x_start, abs(bin[(int)i]));
+		const Vector2f position(static_cast<float>(x_start), static_cast<float>(abs(bin[static_cast<int>(i)])));
 		VA.append(Vertex(starting_position + Vector2f(position.x, -position.y / 100000000 * 500), Color::White));
 		//position.y is divided by such a large number to scale it into reasonable interval
 		//multiplying sets the maximum height in pixels
 		x_start++;
 	}
 }
+/**
+ * Generates LINE-like structure pointing down, with bass on the left and heights on the right side.
+ * Heights are stored into VertexArray VA.
+ * Starting position of the structure is set by argument Vector2f starting_position.
+ */
 void WithFFT::generate_line_lr_down(sf::VertexArray& VA, const sf::Vector2f& starting_position)
 {
-	int stop_position = log(buffer_size / (2 * 3)) / log(1.01);
+	int stop_position = static_cast<int>(log(buffer_size / (2 * 3)) / log(1.01));
 	//buffer_size is divided by 2 for working only on first half of spectrum (second is the same)
 	//, and by three to avoid first few noisi frequencies
 	int x_start = (WIDTH - stop_position) / 2;
-	for (float i = 3.f; i < buffer_size / 2; i *= 1.01)
+	for (float i = 3.f; i < buffer_size / 2; i *= static_cast<float>(1.01))
 	{
-		const Vector2f position(x_start, abs(bin[(int)i]));
+		const Vector2f position(static_cast<float>(x_start), static_cast<float>(abs(bin[static_cast<int>(i)])));
 		VA.append(Vertex(starting_position + Vector2f(position.x, position.y / 100000000 * 500), Color::White));
 		//position.y is divided by such a large number to scale it into reasonable interval
 		//multiplying sets the maximum height in pixels
 		x_start++;
 	}
 }
+/**
+ * Generates BAR-like structure pointing down, with bass on the left and heights on the right side.
+ * Heights are stored into VertexArray VA.
+ * Starting position of the structure is set by argument Vector2f starting_position.
+ */
 void WithFFT::generate_bars_lr_down(sf::VertexArray& VA, const sf::Vector2f& starting_position)
 {
-	const int stop_position = log(buffer_size / (2 * 3)) / log(1.01);
+	int stop_position = static_cast<int>(log(buffer_size / (2 * 3)) / log(1.01));
 	//buffer_size is divided by 2 for working only on first half of spectrum (second is the same)
 	//, and by three to avoid first few noisi frequencies
 	int x_start = (WIDTH - stop_position) / 2;
-	for (float i = 3.f; i < buffer_size / 2; i *= 1.01)
+	for (float i = 3.f; i < buffer_size / 2; i *= static_cast<float>(1.01))
 	{
-		const Vector2f position(x_start, abs(bin[(int)i]));
+		const Vector2f position(static_cast<float>(x_start), static_cast<float>(abs(bin[static_cast<int>(i)])));
 		VA.append(Vertex(starting_position + Vector2f(position.x, position.y / 100000000 * 500), Color(209, 209, 209)));
 		VA.append(Vertex(starting_position + Vector2f(position.x, 0), Color(254, 254, 254, 60)));
 		//position.y is divided by such a large number to scale it into reasonable interval
@@ -170,15 +206,20 @@ void WithFFT::generate_bars_lr_down(sf::VertexArray& VA, const sf::Vector2f& sta
 		x_start++;
 	}
 }
+/**
+ * Generates BAR-like structure pointing up, with bass on the left and heights on the right side.
+ * Heights are stored into VertexArray VA.
+ * Starting position of the structure is set by argument Vector2f starting_position.
+ */
 void WithFFT::generate_bars_lr_up(sf::VertexArray& VA, const sf::Vector2f& starting_position)
 {
-	const int stop_position = log(buffer_size / (2 * 3)) / log(1.01);
+	int stop_position = static_cast<int>(log(buffer_size / (2 * 3)) / log(1.01));
 	//buffer_size is divided by 2 for working only on first half of spectrum (second half is the same)
 	//, and by three to avoid first few noisy frequencies
 	int x_start = (WIDTH - stop_position) / 2;
-	for (float i = 3.f; i < buffer_size / 2; i *= 1.01)
+	for (float i = 3.f; i < buffer_size / 2; i *= static_cast<float>(1.01))
 	{
-		const Vector2f position(x_start, abs(bin[(int)i]));
+		const Vector2f position(static_cast<float>(x_start), static_cast<float>(abs(bin[static_cast<int>(i)])));
 		VA.append(Vertex(starting_position + Vector2f(position.x, -position.y / 100000000 * 500), Color::White));
 		VA.append(Vertex(starting_position + Vector2f(position.x, 0)));
 		//position.y is divided by such a large number to scale it into reasonable interval
@@ -186,15 +227,33 @@ void WithFFT::generate_bars_lr_up(sf::VertexArray& VA, const sf::Vector2f& start
 		x_start++;
 	}
 }
+/**
+ * Generates raw frequency spectrum with Bass on the left, heights on the right.
+ * Heights are stored into VertexArray VA.
+ * Starting position of the structure is set by argument Vector2f starting_position.
+ */
 void WithFFT::frequency_spectrum_lr(sf::VertexArray& VA, const sf::Vector2f& starting_position, const int& length, const int& height)
 {
 	for (int i = 0; i < length; i++)
 	{
-		VA.append(Vertex(starting_position + Vector2f(i, -abs(bin[(int)i]) / 100000000 * height), Color(217, 98, 80,128)));
+		VA.append(Vertex(starting_position +	//base
+			Vector2f(static_cast<float>(i), //x
+			static_cast<float>(-abs(bin[static_cast<int>(i)]) / 100000000 * height)), //y
+			Color(217, 98, 80,128)));
 	}
 }
 
-//layers of frequencies
+/**
+ * Generates logarithmically scaled frequency halo forming a circle. 
+ * Each layer is stored at one VertexArray in the vector VAs.
+ * Parameters:
+ * Color of each layer is in vector colors.
+ * Height of each layer is in vector heights.
+ * Center is the center of the halo.
+ * Radius is the base radius the halo will reach when no music is playing.
+ * From is a frequency from which the halo should start generating.
+ * To is a frequency to which the halo should be generated.
+ */
 void WithFFT::frequency_spectrum_round(std::vector<sf::VertexArray>& VAs,std::vector<sf::Color>& colors,const std::vector<float>& heights, const sf::Vector2f& center, const float& radius, const int& from, const int& to)
 {
 	if (VAs.size() != colors.size() || VAs.size() != heights.size())
@@ -205,9 +264,6 @@ void WithFFT::frequency_spectrum_round(std::vector<sf::VertexArray>& VAs,std::ve
 	{
 		throw new invalid_argument("spectrum cant start at 0, set different 'from' value");
 	}
-
-
-
 	
 	const float scale = float(to-from) / 180.f;		//divided by angle (in degrees) that the scale should cover (360 - circle; 180 - half a circle)
 	
@@ -218,35 +274,33 @@ void WithFFT::frequency_spectrum_round(std::vector<sf::VertexArray>& VAs,std::ve
 
 
 	/**/
-	for(int j = VAs.size()-1; j >= 0; j--)
+	for(int j = static_cast<int>(VAs.size()-1); j >= 0; j--)
 	{
-		//VAs[j].append(Vertex(center + ))
 		//generating left side of the halo
+
 		float new_radius;
 		float angle;
 		Vector2f cartez;
 		Vector2f base_position;
-		for (float i = from; i<float(to); i *= 1.01)
+		for (float i = static_cast<float>(from); i< static_cast<float>(to); i *= static_cast<float>(1.01))
 		{
 			//generating left-side
-			new_radius = radius * (1 + (abs(bin[int(i)]) / 30000000000 * heights[j]));
+			new_radius = radius * static_cast<float>(1 + (abs(bin[static_cast<int>(i)]) / 30000000000 * heights[j]));
 			angle= ((i-from)/ scale + 90 ) * PI / 180;
 			
 			cartez = Vector2f(new_radius * cos(angle), new_radius * sin(angle)); //polar coordinates to cartez
 			base_position = center + cartez;
 			VAs[j].append(Vertex(base_position, colors[j]));
-
-			//generating right-side
-
-		}
+		}		
 		//last vertex for completing full semicircle
 		angle = (270 * PI / 180);
 		cartez = Vector2f(new_radius * cos(angle), new_radius * sin(angle));
 		VAs[j].append(Vertex(center + cartez));
+		
 		//generating right side of the halo
-		for (float i = from; i<float(to); i *= 1.01)
+		for (float i = static_cast<float>(from); i< static_cast<float>(to); i *= static_cast<float>(1.01))
 		{
-			 new_radius = radius * (1 + (abs(bin[int(i)]) / 30000000000 * heights[j]));
+			new_radius = radius * static_cast<float>(1 + (abs(bin[static_cast<int>(i)]) / 30000000000 * heights[j]));
 			angle = (-(i - from) / scale + 90) * PI / 180;
 			cartez = Vector2f(new_radius * cos(angle), new_radius * sin(angle));
 			base_position = center + cartez;
@@ -258,15 +312,19 @@ void WithFFT::frequency_spectrum_round(std::vector<sf::VertexArray>& VAs,std::ve
 		VAs[j].append(Vertex(center + cartez));
 	}
 }
-
+/**
+ * Generates map-like structure based on current song buffer values.
+ * Map structure is stored at VertexArray VA.
+ * Starting position is at bottom left corner of the map.
+ */
 void WithFFT::generate_map(sf::VertexArray& VA, const sf::Vector2f& starting_position)
 {
-	const auto move_vec = Vector2f(-0.9, 1.1);
-	const int stop_position = log(buffer_size / (2 * 3)) / log(1.01);
+	const auto move_vec = Vector2f(static_cast<float>(-0.9), static_cast<float>(1.1));
+	const int stop_position = static_cast<int>(log(buffer_size / (2 * 3)) / log(1.01));
 	//buffer_size is divided by 2 for working only on first half of spectrum (second is the same)
 	//, and by three to avoid first few noisy frequencies
 	int x_start = (WIDTH - stop_position) / 2;
-	Vector2f position(x_start,0);
+	Vector2f position(static_cast<float>(x_start),0.f);
 
 	
 	//Move previously generated points
@@ -277,16 +335,16 @@ void WithFFT::generate_map(sf::VertexArray& VA, const sf::Vector2f& starting_pos
 
 	//Generate new map
 	map.push_back(Vertex(starting_position + Vector2f(position.x, -position.y / 100000000 * 500), Color(254, 254, 254, 20))); //helps with balancing height
-	for (float i = 3.f; i < (buffer_size/2)-80; i*=1.01)
+	for (float i = 3.f; i < (buffer_size/2)-80; i*= static_cast<float>(1.01))
 	{
-		position = Vector2f(x_start, abs(bin[(int)i]));
+		position = Vector2f(static_cast<float>(x_start), static_cast<float>(abs(bin[static_cast<int>(i)])));
 		map.push_back(Vertex(starting_position + Vector2f(position.x, -position.y / 100000000 * 500), Color(254, 254, 254, 20)));
 		x_start++;
 	}
 	map.push_back(Vertex(starting_position + Vector2f(position.x, -0 / 100000000 * 500), Color(254, 254, 254, 20))); //helps with balancing height
 	
 	VA.clear();
-	for (int i = max((double)0,map.size() - 3e5); i < map.size(); i++)
+	for (int i = static_cast<int>(max((double)0,map.size() - 3e5)); i < map.size(); i++)
 	{
 		VA.append(map[i]);	}
 	
@@ -296,19 +354,25 @@ void WithFFT::generate_map(sf::VertexArray& VA, const sf::Vector2f& starting_pos
 #pragma endregion 
 
 #pragma region Radio
-
+/**
+ *  Initializes drawables.
+ */
 Radio::Radio(const std::string& song_name): WithFFT(song_name)
 {
 	VA_up.setPrimitiveType(LineStrip);
 	VA_down.setPrimitiveType(LinesStrip);
 }
-
+/**
+ *  Draws Radio to given window.
+ */
 void Radio::draw(sf::RenderWindow& window)
 {
 	window.draw(VA_up);
 	window.draw(VA_down);
 }
-
+/**
+ *  Updates bar heights.
+ */
 void Radio::update()
 {
 	WithFFT::update();
@@ -318,26 +382,29 @@ void Radio::update()
 	const Vector2f starting_position(0.f, HEIGHT/2.f);
 	generate_bars_lr_up(VA_up,starting_position);
 	generate_bars_lr_down(VA_down, starting_position);
-
-
-	//generate_line_lr_up(VA_up, starting_position);
-	//generate_line_lr_down(VA_down, starting_position);
-	//frequency_spectrum_lr(VA_up, starting_position,WIDTH,HEIGHT/2);
 }
 
 
 #pragma endregion 
 
 #pragma region Map
+/**
+ *  Initializes drawables.
+ */
 Map::Map(const std::string& song_name) :WithFFT(song_name)
 {
 	VA.setPrimitiveType(LineStrip);
 }
+/**
+ *  Draws Map to the given window.
+ */
 void Map::draw(sf::RenderWindow& window)
 {
 	window.draw(VA);
 }
-
+/**
+ *  Updates map position.
+ */
 void Map::update()
 {
 	WithFFT::update();
@@ -353,6 +420,9 @@ void Map::update()
 #pragma endregion 
 
 #pragma region Space
+/**
+ *  Initializes drawables.
+ */
 Space::Space(const std::string& song_name) : WithFFT(song_name)
 {
 	stars.resize(num_of_stars);
@@ -389,17 +459,19 @@ Space::Space(const std::string& song_name) : WithFFT(song_name)
 
 	}
 	const float base_height = 300;
-	halo_heights.emplace_back(base_height * 3);
-	halo_heights.emplace_back(base_height * 2.6);
-	halo_heights.emplace_back(base_height * 2);
-	halo_heights.emplace_back(base_height);
+	halo_heights.push_back(base_height * 3);
+	halo_heights.push_back(base_height * 2.6);
+	halo_heights.push_back(base_height * 2);
+	halo_heights.push_back(base_height);
 
 	halo_colors.push_back(Color::Blue);		
 	halo_colors.push_back(Color::Red);
 	halo_colors.push_back(Color::Yellow);
 	halo_colors.push_back(Color::White);
 }
-
+/**
+ *  Draws Space to the given window.
+ */
 void Space::draw(sf::RenderWindow& window)
 {
 	window.draw(star_vertices);
@@ -413,30 +485,37 @@ void Space::draw(sf::RenderWindow& window)
 	window.draw(planet);
 
 }
-float Space::update_by_sound(const int& from, const int& to, const int& scale_factor)
+/**
+ *  Helper funciton. Gets scaled approximate of given range of frequencies.
+ */
+float Space::update_by_sound(const int from, const int to, const int scale_factor)
 {
 	float sum = 0;
 	for (int i = from; i < to; ++i)
 	{
-		sum += abs(bin[i]);
+		sum += static_cast<float>(abs(bin[i]));
 	}
 	return (sum / (to - from)) / scale_factor;
 }
-
-void Space::update_radius(const float& update_value,sf::CircleShape& circle) const
+/**
+ * Helper function. Updates radius of given circle shape.
+ */
+void Space::update_radius(const float update_value,sf::CircleShape& circle) const
 {
 	circle.setRadius(base_planet_radius * update_value);
 	circle.setOrigin(circle.getRadius(), circle.getRadius());
 	circle.setPosition(Vector2f((WIDTH / 2.f), (HEIGHT / 2.f)));
 }
 
-
+/**
+ *  Updates Space state by current song buffer values.
+ */
 void Space::update()
 {
 	WithFFT::update();
 
 	//update base_star_speed accoring to sub_bass frequencies
-	base_star_speed = 1.01 + update_by_sound(0, 60,100000000);
+	base_star_speed = static_cast<float>(1.01) + update_by_sound(0, 60,100000000);
 	
 	//planet radius is mapped to human voice frequencies
 	float radius_update = 1.f + update_by_sound(90, 280, 5000000);
@@ -445,7 +524,7 @@ void Space::update()
 	update_radius(radius_update, planet);
 
 	//rotation is based on higher pitch frequencies - the flow of the sceen feels more natural imo
-	planet.rotate(0.5 + update_by_sound(500, 3000,1000000 ));
+	planet.rotate(static_cast<float>(0.5) + update_by_sound(500, 3000,1000000 ));
 
 	//stars generation
 	star_vertices.clear();
@@ -471,9 +550,9 @@ void Space::update()
 		}
 
 		//adding head of the star
-		star_vertices.append(Vertex(Vector2f(star.x, star.y),Color(star.z,star.z,star.z,255)));
+		star_vertices.append(Vertex(Vector2f(star.x, star.y),Color(static_cast<sf::Uint8>(star.z), static_cast<sf::Uint8>(star.z), static_cast<sf::Uint8>(star.z),255)));
 		//adding tail of the star
-		star_vertices.append(Vertex(Vector2f(star.old_x, star.old_y), Color(star.z, star.z, star.z, 255)));
+		star_vertices.append(Vertex(Vector2f(star.old_x, star.old_y), Color(static_cast<sf::Uint8>(star.z), static_cast<sf::Uint8>(star.z), static_cast<sf::Uint8>(star.z), 255)));;
 	}
 	//generating halo around planet
 	for (size_t i = 0; i < halo.size(); i++)
@@ -482,16 +561,5 @@ void Space::update()
 	}
 	
 	frequency_spectrum_round(halo, halo_colors, halo_heights, Vector2f(WIDTH / 2.f, HEIGHT / 2.f), planet.getRadius() - 2, 20, 80);
-
-	
-	//+1 is for drawing optimalization
-	//	const auto position = Vector2f(WIDTH/2.f - planet.getRadius()+1, HEIGHT/2.f);
-	
-	//	frequency_spectrum_lr(ampl_white,position ,int(2.f * planet.getRadius()) , 100);
-	
 }
-
-
-
-
 #pragma endregion 

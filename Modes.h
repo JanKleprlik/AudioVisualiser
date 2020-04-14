@@ -7,7 +7,7 @@
 
 #include "Menu.h"
 
-const float PI = 3.14159265358979323846;
+const float PI = static_cast<float>(3.14159265358979323846);
 
 
 using Complex = std::complex<double>;
@@ -28,8 +28,8 @@ protected:
 	sf::Sound song;
 	
 	unsigned int sample_rate = 0;
-	int sample_count = 0;
-	int buffer_size = 0;
+	sf::Uint64 sample_count = 0;
+	sf::Uint64 buffer_size = 0;
 
 	//helper constants
 	const std::string path = "Resources/Songs/";
@@ -83,7 +83,13 @@ public:
 	void draw(sf::RenderWindow& window) override;
 	void update() override;
 private:
+	/**
+	* Array of vertices that are drawn pointing upwards.
+	*/
 	sf::VertexArray VA_up;
+	/**
+	* Array of vertices that are drawn pointing downwards.
+	*/
 	sf::VertexArray VA_down;
 };
 
@@ -94,6 +100,9 @@ public:
 	void draw(sf::RenderWindow& window) override;
 	void update() override;
 private:
+	/**
+	* Array of vertices that is drawn.
+	*/
 	sf::VertexArray VA;
 };
 
@@ -105,34 +114,70 @@ public:
 	void update() override;
 private:
 	const int num_of_stars  = 300;
-	const int base_planet_radius = 150;
+	const float base_planet_radius = 150;
 
-	float base_star_speed = 1.01;
-	float base_radius_transform = 1.f;
+	float base_star_speed = static_cast<float>(1.01);
 
-	float update_by_sound(const int& from, const int& to, const int& scale_factor);
-	void update_radius(const float& update_value, sf::CircleShape& circle) const;
+	float update_by_sound(const int from, const int to, const int scale_factor);
+	void update_radius(const float update_value, sf::CircleShape& circle) const;
 
 	struct Star
 	{
+		/**
+		* x coordinate of the star
+		*/
 		float x = 0.f;
+		/**
+		* y coordinate of the star
+		*/
 		float y = 0.f;
+		/**
+		* z coordinate of the star
+		*/
 		float z = 0.f;
-
+		/**
+		* previous x coordinate of the star
+		*/
 		float old_x = 0.f;
+		/**
+		* previous y coordinate of the star
+		*/
 		float old_y = 0.f;
 	};
 
-	
+	/**
+	* Vector of stars that are used to compute positions.
+	*/
 	std::vector<Star> stars;
+	/**
+	* Array of vertices representing stars. This is drawn.
+	*/
 	sf::VertexArray star_vertices;
 
+	/**
+	* Vertices used to draw halo areound the planet.
+	*/
 	std::vector<sf::VertexArray> halo;
+	/**
+	* Vector of halo colors. First color is in the background. Last is at the front.
+	*/
 	std::vector<sf::Color> halo_colors;
+	/**
+	* Vector of hegihts of each halo color layer.
+	*/
 	std::vector<float> halo_heights;
 	
+	/**
+	* Planet shape.
+	*/
 	sf::CircleShape planet;
+	/**
+	* Planet background shape.
+	*/
 	sf::CircleShape planet_background;
+	/**
+	* Planet texture.
+	*/
 	sf::Texture planet_texture;
 
 };

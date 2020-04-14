@@ -6,12 +6,11 @@
 using namespace std;
 using namespace sf;
 
-/*
+/**
  * Renders menu sprites
  */
 void Menu::draw(RenderWindow& window)
 {
-	//update_buttons();
 	for (auto&& button : buttons)
 	{
 		button->draw(window);
@@ -28,7 +27,9 @@ void Menu::draw(RenderWindow& window)
 	}
 	
 }
-
+/**
+ * Loads songs and modes from database. Initializes all the buttons.
+ */
 Menu::Menu()
 {
 
@@ -77,20 +78,6 @@ Menu::Menu()
 			song_name.set_position(x, y + 70 * (i % 6 + 1) + 25);
 			song_buttons.push_back(make_unique<SongButton>(song_name));
 		}
-
-		/*/
-		for (int i = 0; i < 6; i++)
-		{
-			SongButton song_name(290.f, 50.f);
-			song_name.set_button_color(light_grey);
-			song_name.set_text_color(black);
-			song_name.set_font(font);
-			song_name.set_text_size(24);
-			song_name.set_text_string(database.get_song_at(i + song_page * 6));
-			song_name.set_position(x, y + 70 * (i + 1) + 25);
-			song_buttons.push_back(make_unique<SongButton>(song_name));
-		}
-		/**/
 		active_song_button = song_buttons[0].get();
 		active_song_button->activate(*this);
 	}
@@ -183,11 +170,16 @@ Menu::Menu()
 	song.setLoop(true);
 	song.play();
 }
-
+/**
+ *  Adds song to the database. Song name must be written to the command line.
+ */
 void Menu::add_song(const std::string& song)
 {
 	database.add_song(song);
 }
+/**
+ * Changes page of songs.
+ */
 void Menu::change_page(int i)
 {
 	if (song_page + i < 0 || song_page + i >= (database.get_size()/6)+1)
@@ -199,15 +191,23 @@ void Menu::change_page(int i)
 		song_page += i;
 	}
 }
+/**
+ * Sets mode from as active. 
+ */
 void Menu::set_mode()
 {
 	chosen_mode = active_mode_button->get_text();
 }
+/** 
+ * Sets song as active.
+ */
 void Menu::set_song()
 {
 	chosen_song = active_song_button->get_text();
 }
-
+/**
+ * Updates Song button texts.
+ */
 void Menu::update_buttons()
 {
 	int i = 0;
@@ -217,24 +217,33 @@ void Menu::update_buttons()
 		i++;
 	}
 }
-
+/**
+ * Returns chosen mode.
+ */
 std::string& Menu::get_mode()
 {
 	return chosen_mode;
 }
+/**
+ * Returns chosen song.
+ */
 std::string& Menu::get_song()
 {
 	return chosen_song;
 }
-
+/**
+ * Quits the application.
+ */
 void Menu::quit()
 {
 	song.stop();
 }
-
+/**
+ * Restarts menu song and reopens menu.
+ */
 void Menu::restart()
 {
 	song.play();
-	active = true;
+	is_active = true;
 }
 
