@@ -24,13 +24,13 @@ If you want to add new song, you have to manually add the song in .wav or .flac 
 ## Modes
 ### Amplitude mode
 This mode shows raw frequency waves.
-![Amplitude mode](/Documentation/amplitude.png)
+![Amplitude mode](/Documentation/amplitude.PNG)
 ### Radio mode
 This mode visualizes the song as bars. Each bar represents specific frequency and its height represents its loudness.
-![Radio mode](/Documentation/radio.png)
+![Radio mode](/Documentation/radio.PNG)
 ### Map mode
 This mode creates a map that moves with time. Map is generated similarly as radio mode is.
-![Map mode](/Documentation/map.png)
+![Map mode](/Documentation/map.PNG)
 ### Space mode
 This is the most complex mode. Stars speed is linked to sub bass frequencies. Planet size is mapped to human voice frequencies. Rotation of the planet is mapped to high pitch frequencies. And lastly halo is radio mode-like representation of bass frequencies.
-![Space mode](/Documentation/space.png)
+![Space mode](/Documentation/space.PNG)
