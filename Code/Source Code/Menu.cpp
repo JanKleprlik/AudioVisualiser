@@ -175,9 +175,7 @@ void Menu::add_song(const std::string& song)
 {
 	database.add_song(song);
 	//reload song buttons
-	load_song_buttons();
-
-	
+	load_song_buttons();	
 }
 
 /**
