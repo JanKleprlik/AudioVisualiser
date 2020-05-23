@@ -5,8 +5,8 @@
 #include "Modes.h"
 
 
-#define WIDTH 1920
-#define HEIGHT 1080
+#define WIDTH 1280
+#define HEIGHT 920
 #define FPS 55
 
 
@@ -21,12 +21,12 @@ private:
 	*/
 	sf::RenderWindow window;
 	/**
- * Currently chosen song.
- */
+	* Currently chosen song.
+	*/
 	std::string active_song;
 	/**
- * Currently chosen play mode.
- */
+	* Currently chosen play mode.
+	*/
 	std::string active_mode;
 	void initialize_mode(const std::string& mode_name, const std::string& song_name);
 	

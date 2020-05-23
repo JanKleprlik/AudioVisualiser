@@ -103,7 +103,7 @@ Vizualizer::Vizualizer()
 	settings.antialiasingLevel = 4;
 	
 	const VideoMode desktop = VideoMode::getDesktopMode();
-	window.create(VideoMode(WIDTH, HEIGHT, desktop.bitsPerPixel), "Feel The Beat",Style::Default, settings);
+	window.create(VideoMode(WIDTH, HEIGHT, desktop.bitsPerPixel), "Feel The Beat",Style::Titlebar| Style::Close, settings);
 	window.setFramerateLimit(FPS);
 }
 
