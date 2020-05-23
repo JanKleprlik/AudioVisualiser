@@ -22,7 +22,6 @@
     <ClInclude Include="Code\Headerss\Menu.h" />
     <ClInclude Include="Code\Headerss\Modes.h" />
     <ClInclude Include="Code\Headerss\SongDatabase.h" />
-    <ClInclude Include="Code\Headerss\SoundProcessor.h" />
     <ClInclude Include="Code\Headerss\Vizualizer.h" />
   </ItemGroup>
   <ItemGroup>
