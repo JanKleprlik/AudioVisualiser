@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Code">
       <UniqueIdentifier>{889ee60c-9263-4386-972a-2115cf179553}</UniqueIdentifier>
     </Filter>
@@ -16,6 +12,16 @@
     </Filter>
     <Filter Include="Libraries">
       <UniqueIdentifier>{e0861449-319c-4a02-8391-30252a8ad8b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Resources\Fonts">
+      <UniqueIdentifier>{7eed05cd-26fe-447b-add9-45df42e513b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Songs">
+      <UniqueIdentifier>{07d431fb-f739-4a5b-b082-d154bab9c410}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -59,31 +65,67 @@
     <CopyFileToFolders Include="SFML-2.5.1\openal32.dll">
       <Filter>Libraries</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="SFML-2.5.1\sfml-audio-2.dll">
+      <Filter>Libraries</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="SFML-2.5.1\sfml-window-d-2.dll">
+      <Filter>Libraries</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="SFML-2.5.1\sfml-window-2.dll">
+      <Filter>Libraries</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="SFML-2.5.1\sfml-system-d-2.dll">
+      <Filter>Libraries</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="SFML-2.5.1\sfml-system-2.dll">
+      <Filter>Libraries</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="SFML-2.5.1\sfml-graphics-d-2.dll">
+      <Filter>Libraries</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="SFML-2.5.1\sfml-graphics-2.dll">
+      <Filter>Libraries</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="SFML-2.5.1\sfml-audio-d-2.dll">
+      <Filter>Libraries</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SFML-2.5.1\sfml-window-d-2.dll">
-      <Filter>Libraries</Filter>
-    </None>
-    <None Include="SFML-2.5.1\sfml-system-d-2.dll">
-      <Filter>Libraries</Filter>
-    </None>
-    <None Include="SFML-2.5.1\sfml-graphics-d-2.dll">
-      <Filter>Libraries</Filter>
-    </None>
-    <None Include="SFML-2.5.1\sfml-audio-d-2.dll">
-      <Filter>Libraries</Filter>
-    </None>
-    <None Include="SFML-2.5.1\sfml-window-2.dll">
-      <Filter>Libraries</Filter>
-    </None>
-    <None Include="SFML-2.5.1\sfml-system-2.dll">
-      <Filter>Libraries</Filter>
-    </None>
-    <None Include="SFML-2.5.1\sfml-graphics-2.dll">
-      <Filter>Libraries</Filter>
-    </None>
-    <None Include="SFML-2.5.1\sfml-audio-2.dll">
-      <Filter>Libraries</Filter>
-    </None>
+    <Image Include="Resources\mars.png">
+      <Filter>Resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Resources\Fonts\sansation.ttf">
+      <Filter>Resources\Fonts</Filter>
+    </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Resources\Songs\ass.wav">
+      <Filter>Resources\Songs</Filter>
+    </Media>
+    <Media Include="Resources\Songs\gymno.wav">
+      <Filter>Resources\Songs</Filter>
+    </Media>
+    <Media Include="Resources\Songs\chameleon.wav">
+      <Filter>Resources\Songs</Filter>
+    </Media>
+    <Media Include="Resources\Songs\menu.wav">
+      <Filter>Resources\Songs</Filter>
+    </Media>
+    <Media Include="Resources\Songs\ppl.wav">
+      <Filter>Resources\Songs</Filter>
+    </Media>
+    <Media Include="Resources\Songs\sifflet.wav">
+      <Filter>Resources\Songs</Filter>
+    </Media>
+    <Media Include="Resources\Songs\Audio-LSD.wav">
+      <Filter>Resources\Songs</Filter>
+    </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resources\Songs\song_database.txt">
+      <Filter>Resources\Songs</Filter>
+    </Text>
   </ItemGroup>
 </Project>

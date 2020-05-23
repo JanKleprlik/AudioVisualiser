@@ -234,7 +234,8 @@ private:
 	SongDatabase database;
 	std::vector<std::string> modes = std::vector<std::string>{ "Amplitude","Radio","Map","Space" };
 	void update_buttons();
-
+	void load_song_buttons();
+	
 	//menu song
 	sf::SoundBuffer song_buffer;
 	sf::Sound song;

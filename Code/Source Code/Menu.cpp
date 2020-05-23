@@ -33,15 +33,7 @@ void Menu::draw(RenderWindow& window)
 Menu::Menu()
 {
 
-	#pragma region loading song names
 
-	ifstream sr("Resources/Songs/song_database.txt");
-	string song_name_str;
-	while (getline(sr, song_name_str))
-	{
-		database.load_song(song_name_str);
-	}
-	#pragma endregion
 
 	//loading font
 	if (!font.loadFromFile("Resources/Fonts/sansation.ttf"))
@@ -66,7 +58,9 @@ Menu::Menu()
 		songs_header.set_position(x, y);
 		buttons.push_back(make_unique<UnclickableButton>(songs_header));
 
-
+		load_song_buttons();
+		
+		/*/
 		for(int i = 0; i< database.get_size();i++)
 		{
 			SongButton song_name(290.f, 50.f);
@@ -80,6 +74,7 @@ Menu::Menu()
 		}
 		active_song_button = song_buttons[0].get();
 		active_song_button->activate(*this);
+		*/
 	}
 	#pragma endregion
 
@@ -170,13 +165,60 @@ Menu::Menu()
 	song.setLoop(true);
 	song.play();
 }
+
+
+
 /**
  *  Adds song to the database. Song name must be written to the command line.
  */
 void Menu::add_song(const std::string& song)
 {
 	database.add_song(song);
+	//reload song buttons
+	load_song_buttons();
+
+	
 }
+
+/**
+ * Reloads songs that are in the database
+ */
+void Menu::load_song_buttons()
+{
+	database.clear();
+	song_buttons.clear();
+
+#pragma region loading song names
+
+	ifstream sr("Resources/Songs/song_database.txt");
+	string song_name_str;
+	while (getline(sr, song_name_str))
+	{
+		database.load_song(song_name_str);
+	}
+#pragma endregion
+
+	
+	constexpr float x = WIDTH * 0.35;
+	constexpr float y = HEIGHT * 0.25;
+	song_page = 0;
+	for (int i = 0; i < database.get_size(); i++)
+	{
+		SongButton song_name(290.f, 50.f);
+		song_name.set_button_color(light_grey);
+		song_name.set_text_color(black);
+		song_name.set_font(font);
+		song_name.set_text_size(24);
+		song_name.set_text_string(database.get_song_at(i + song_page * 6));
+		song_name.set_position(x, y + 70 * (i % 6 + 1) + 25);
+		song_buttons.push_back(make_unique<SongButton>(song_name));
+	}
+	active_song_button = song_buttons[0].get();
+	active_song_button->activate(*this);
+
+}
+
+
 /**
  * Changes page of songs.
  */

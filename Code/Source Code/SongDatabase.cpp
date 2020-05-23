@@ -72,3 +72,11 @@ int SongDatabase::get_size()
 {
 	return database.size();
 }
+
+/**
+ * Clears the database.
+ */
+void SongDatabase::clear()
+{
+	database.clear();
+}
