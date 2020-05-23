@@ -14,6 +14,9 @@
     <Filter Include="Code\Source Code">
       <UniqueIdentifier>{3cee4fd8-890f-46a6-b7ec-8044813fe7d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Libraries">
+      <UniqueIdentifier>{e0861449-319c-4a02-8391-30252a8ad8b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Headerss\Menu.h">
@@ -51,5 +54,36 @@
     <ClCompile Include="Code\Source Code\Vizualizer.cpp">
       <Filter>Code\Source Code</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="SFML-2.5.1\openal32.dll">
+      <Filter>Libraries</Filter>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SFML-2.5.1\sfml-window-d-2.dll">
+      <Filter>Libraries</Filter>
+    </None>
+    <None Include="SFML-2.5.1\sfml-system-d-2.dll">
+      <Filter>Libraries</Filter>
+    </None>
+    <None Include="SFML-2.5.1\sfml-graphics-d-2.dll">
+      <Filter>Libraries</Filter>
+    </None>
+    <None Include="SFML-2.5.1\sfml-audio-d-2.dll">
+      <Filter>Libraries</Filter>
+    </None>
+    <None Include="SFML-2.5.1\sfml-window-2.dll">
+      <Filter>Libraries</Filter>
+    </None>
+    <None Include="SFML-2.5.1\sfml-system-2.dll">
+      <Filter>Libraries</Filter>
+    </None>
+    <None Include="SFML-2.5.1\sfml-graphics-2.dll">
+      <Filter>Libraries</Filter>
+    </None>
+    <None Include="SFML-2.5.1\sfml-audio-2.dll">
+      <Filter>Libraries</Filter>
+    </None>
   </ItemGroup>
 </Project>
