@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include "Menu.h"
