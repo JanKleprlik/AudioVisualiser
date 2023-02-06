@@ -1,8 +1,6 @@
-Audio-LSD.wav
 ass.wav
 gymno.wav
 chameleon.wav
 menu.wav
 sifflet.wav
-
 ppl.wav
