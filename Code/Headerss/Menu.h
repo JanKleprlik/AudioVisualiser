@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
 #include "SongDatabase.h"
