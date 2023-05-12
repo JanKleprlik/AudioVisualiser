@@ -1,5 +1,6 @@
-
 # Audio Visualizer
+
+![Linux build](https://github.com/JanKleprlik/AudioVisualiser/actions/workflows/linux.yml/badge.svg)
 
 Application visualizing songs in real time.
 
