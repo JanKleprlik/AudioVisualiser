@@ -1,3 +1,6 @@
+// Copyright (c) 2020 Jan Kleprlík <kleprlikjan@gmail.com>
+// Licensed under GPL v3 or later
+
 #include <iostream>
 #include "../Headerss/Vizualizer.h"
 
